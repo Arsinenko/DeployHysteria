@@ -1,0 +1,19 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:DeployHysteria.UI.ViewModels"
+        xmlns:views="using:DeployHysteria.UI.Views"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="920" d:DesignHeight="750"
+        x:Class="DeployHysteria.UI.Views.MainWindow"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="DeployHysteria 2 - Manager"
+        MinWidth="480"
+        MinHeight="600"
+        Width="920"
+        Height="780"
+        WindowStartupLocation="CenterScreen">
+
+    <views:MainView />
+
+</Window>

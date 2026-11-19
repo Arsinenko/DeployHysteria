@@ -1,0 +1,329 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:DeployHysteria.UI.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="850" d:DesignHeight="1200"
+             x:Class="DeployHysteria.UI.Views.DeployView"
+             x:DataType="vm:DeployViewModel">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel MaxWidth="820" Margin="16" Spacing="16">
+
+            <!-- Mode Switcher Banner -->
+            <Border Classes="Card" Background="{DynamicResource ControlFillColorSecondaryBrush}">
+                <Grid ColumnDefinitions="*,Auto">
+                    <StackPanel Spacing="3">
+                        <TextBlock Text="{Binding Loc[ModeSimple]}"
+                                   IsVisible="{Binding !IsAdvancedMode}"
+                                   FontSize="15" FontWeight="SemiBold" />
+                        <TextBlock Text="{Binding Loc[ModeAdvanced]}"
+                                   IsVisible="{Binding IsAdvancedMode}"
+                                   FontSize="15" FontWeight="SemiBold" />
+
+                        <TextBlock Text="{Binding Loc[ModeDescriptionSimple]}"
+                                   IsVisible="{Binding !IsAdvancedMode}"
+                                   Classes="HelpHint" />
+                        <TextBlock Text="{Binding Loc[ModeDescriptionAdvanced]}"
+                                   IsVisible="{Binding IsAdvancedMode}"
+                                   Classes="HelpHint" />
+                    </StackPanel>
+
+                    <ToggleSwitch Grid.Column="1"
+                                  IsChecked="{Binding IsAdvancedMode}"
+                                  OnContent="{Binding Loc[ModeAdvanced]}"
+                                  OffContent="{Binding Loc[ModeSimple]}"
+                                  VerticalAlignment="Center" />
+                </Grid>
+            </Border>
+
+            <!-- Card 1: Server Connection -->
+            <Border Classes="Card">
+                <StackPanel Spacing="12">
+                    <TextBlock Text="{Binding Loc[ServerConnectionTitle]}" Classes="CardTitle" />
+
+                    <!-- Host & Port -->
+                    <Grid ColumnDefinitions="*,Auto">
+                        <StackPanel Margin="0,0,10,0">
+                            <TextBlock Text="{Binding Loc[HostLabel]}" Classes="FieldLabel" />
+                            <TextBox Text="{Binding Host}"
+                                     PlaceholderText="{Binding Loc[HostWatermark]}"
+                                     ToolTip.Tip="{Binding Loc[HostTooltip]}" />
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="1" Width="120" IsVisible="{Binding IsAdvancedMode}">
+                            <TextBlock Text="{Binding Loc[SshPortLabel]}" Classes="FieldLabel" />
+                            <NumericUpDown Value="{Binding SshPort}"
+                                           Minimum="1" Maximum="65535"
+                                           FormatString="0"
+                                           ToolTip.Tip="{Binding Loc[SshPortTooltip]}" />
+                        </StackPanel>
+                    </Grid>
+
+                    <!-- Username -->
+                    <StackPanel>
+                        <TextBlock Text="{Binding Loc[UsernameLabel]}" Classes="FieldLabel" />
+                        <TextBox Text="{Binding Username}"
+                                 PlaceholderText="{Binding Loc[UsernameWatermark]}"
+                                 ToolTip.Tip="{Binding Loc[UsernameTooltip]}" />
+                    </StackPanel>
+
+                    <!-- Auth Method Selector (Advanced) -->
+                    <StackPanel IsVisible="{Binding IsAdvancedMode}" Spacing="6">
+                        <TextBlock Text="{Binding Loc[AuthTypeLabel]}" Classes="FieldLabel" />
+                        <StackPanel Orientation="Horizontal" Spacing="16">
+                            <RadioButton Content="{Binding Loc[AuthTypePassword]}"
+                                         IsChecked="{Binding AuthTypeIndex, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=0}"
+                                         Command="{Binding SelectPasswordAuthCommand}" />
+                            <RadioButton Content="{Binding Loc[AuthTypeKey]}"
+                                         IsChecked="{Binding AuthTypeIndex, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=1}"
+                                         Command="{Binding SelectKeyAuthCommand}" />
+                        </StackPanel>
+                    </StackPanel>
+
+                    <!-- Password field -->
+                    <StackPanel IsVisible="{Binding AuthTypeIndex, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=0}">
+                        <TextBlock Text="{Binding Loc[PasswordLabel]}" Classes="FieldLabel" />
+                        <TextBox Text="{Binding Password}"
+                                 PasswordChar="●"
+                                 PlaceholderText="{Binding Loc[PasswordWatermark]}"
+                                 ToolTip.Tip="{Binding Loc[PasswordTooltip]}" />
+                    </StackPanel>
+
+                    <!-- SSH Key fields -->
+                    <StackPanel IsVisible="{Binding AuthTypeIndex, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=1}" Spacing="8">
+                        <TextBlock Text="{Binding Loc[SshKeyLabel]}" Classes="FieldLabel" />
+                        <TextBox Text="{Binding SshPrivateKey}"
+                                 AcceptsReturn="True"
+                                 Height="80"
+                                 PlaceholderText="{Binding Loc[SshKeyWatermark]}"
+                                 ToolTip.Tip="{Binding Loc[SshKeyTooltip]}" />
+
+                        <TextBlock Text="{Binding Loc[SshKeyPassphraseLabel]}" Classes="FieldLabel" />
+                        <TextBox Text="{Binding SshPrivateKeyPassphrase}"
+                                 PasswordChar="●"
+                                 PlaceholderText="{Binding Loc[SshKeyPassphraseWatermark]}" />
+                    </StackPanel>
+
+                </StackPanel>
+            </Border>
+
+            <!-- Card 2: Hysteria 2 Configuration -->
+            <Border Classes="Card">
+                <StackPanel Spacing="12">
+                    <TextBlock Text="{Binding Loc[HysteriaConfigTitle]}" Classes="CardTitle" />
+
+                    <!-- Domain & Port -->
+                    <Grid ColumnDefinitions="*,Auto">
+                        <StackPanel Margin="0,0,10,0">
+                            <TextBlock Text="{Binding Loc[DomainLabel]}" Classes="FieldLabel" />
+                            <TextBox Text="{Binding Domain}"
+                                     PlaceholderText="{Binding Loc[DomainWatermark]}"
+                                     ToolTip.Tip="{Binding Loc[DomainTooltip]}" />
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="1" Width="120" IsVisible="{Binding IsAdvancedMode}">
+                            <TextBlock Text="{Binding Loc[ListenPortLabel]}" Classes="FieldLabel" />
+                            <NumericUpDown Value="{Binding ListenPort}"
+                                           Minimum="1" Maximum="65535"
+                                           FormatString="0"
+                                           ToolTip.Tip="{Binding Loc[ListenPortTooltip]}" />
+                        </StackPanel>
+                    </Grid>
+
+                    <!-- Email -->
+                    <StackPanel>
+                        <TextBlock Text="{Binding Loc[EmailLabel]}" Classes="FieldLabel" />
+                        <TextBox Text="{Binding Email}"
+                                 PlaceholderText="{Binding Loc[EmailWatermark]}"
+                                 ToolTip.Tip="{Binding Loc[EmailTooltip]}" />
+                    </StackPanel>
+
+                    <!-- Client Password -->
+                    <StackPanel Spacing="4">
+                        <TextBlock Text="{Binding Loc[ClientPasswordLabel]}" Classes="FieldLabel" />
+                        <Grid ColumnDefinitions="*,Auto">
+                            <TextBox Text="{Binding ClientPassword}"
+                                     PlaceholderText="{Binding Loc[ClientPasswordWatermark]}"
+                                     ToolTip.Tip="{Binding Loc[ClientPasswordTooltip]}"
+                                     CornerRadius="6,0,0,6" />
+                            <Button Grid.Column="1"
+                                    Classes="Secondary"
+                                    CornerRadius="0,6,6,0"
+                                    Content="{Binding Loc[GenerateButton]}"
+                                    Command="{Binding GeneratePasswordsCommand}" />
+                        </Grid>
+                    </StackPanel>
+
+                    <!-- Obfuscation -->
+                    <Border Background="{DynamicResource ControlFillColorSecondaryBrush}"
+                            CornerRadius="6"
+                            Padding="12"
+                            Margin="0,4,0,0">
+                        <StackPanel Spacing="8">
+                            <CheckBox IsChecked="{Binding EnableObfs}"
+                                      Content="{Binding Loc[EnableObfsLabel]}"
+                                      ToolTip.Tip="{Binding Loc[ObfsTooltip]}" />
+
+                            <StackPanel IsVisible="{Binding EnableObfs}" Spacing="4">
+                                <TextBlock Text="{Binding Loc[ObfsPasswordLabel]}" Classes="FieldLabel" />
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <TextBox Text="{Binding ObfsPassword}"
+                                             PlaceholderText="{Binding Loc[ObfsPasswordWatermark]}"
+                                             CornerRadius="6,0,0,6" />
+                                    <Button Grid.Column="1"
+                                            Classes="Secondary"
+                                            CornerRadius="0,6,6,0"
+                                            Content="{Binding Loc[GenerateButton]}"
+                                            Command="{Binding GeneratePasswordsCommand}" />
+                                </Grid>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+
+                </StackPanel>
+            </Border>
+
+            <!-- Card 3 (Advanced): Masquerade -->
+            <Border Classes="Card" IsVisible="{Binding IsAdvancedMode}">
+                <StackPanel Spacing="12">
+                    <TextBlock Text="{Binding Loc[MasqueradeTitle]}" Classes="CardTitle" />
+                    <TextBlock Text="{Binding Loc[MasqueradeTooltip]}" Classes="HelpHint" />
+
+                    <ComboBox SelectedIndex="{Binding MasqueradeTypeIndex}" HorizontalAlignment="Stretch">
+                        <ComboBoxItem Content="{Binding Loc[MasqueradeTypeFile]}" />
+                        <ComboBoxItem Content="{Binding Loc[MasqueradeTypeProxy]}" />
+                    </ComboBox>
+
+                    <StackPanel IsVisible="{Binding MasqueradeTypeIndex, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=0}">
+                        <TextBlock Text="{Binding Loc[MasqueradeDirLabel]}" Classes="FieldLabel" />
+                        <TextBox Text="{Binding MasqueradeDir}"
+                                 PlaceholderText="{Binding Loc[MasqueradeDirWatermark]}" />
+                    </StackPanel>
+
+                    <StackPanel IsVisible="{Binding MasqueradeTypeIndex, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=1}">
+                        <TextBlock Text="{Binding Loc[MasqueradeProxyUrlLabel]}" Classes="FieldLabel" />
+                        <TextBox Text="{Binding MasqueradeProxyUrl}"
+                                 PlaceholderText="{Binding Loc[MasqueradeProxyUrlWatermark]}" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <!-- Card 4 (Advanced): Bandwidth Limits -->
+            <Border Classes="Card" IsVisible="{Binding IsAdvancedMode}">
+                <StackPanel Spacing="12">
+                    <TextBlock Text="{Binding Loc[BandwidthTitle]}" Classes="CardTitle" />
+                    <TextBlock Text="{Binding Loc[BandwidthTooltip]}" Classes="HelpHint" />
+
+                    <Grid ColumnDefinitions="*,*">
+                        <StackPanel Margin="0,0,8,0">
+                            <TextBlock Text="{Binding Loc[BandwidthUpLabel]}" Classes="FieldLabel" />
+                            <TextBox Text="{Binding BandwidthUp}"
+                                     PlaceholderText="{Binding Loc[BandwidthUpWatermark]}" />
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="1" Margin="8,0,0,0">
+                            <TextBlock Text="{Binding Loc[BandwidthDownLabel]}" Classes="FieldLabel" />
+                            <TextBox Text="{Binding BandwidthDown}"
+                                     PlaceholderText="{Binding Loc[BandwidthDownWatermark]}" />
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!-- Card 5 (Advanced): Security & Pre-flight checks -->
+            <Border Classes="Card" IsVisible="{Binding IsAdvancedMode}">
+                <StackPanel Spacing="12">
+                    <TextBlock Text="{Binding Loc[SecurityTitle]}" Classes="CardTitle" />
+
+                    <CheckBox IsChecked="{Binding EnableUfw}"
+                              Content="{Binding Loc[EnableUfwLabel]}" />
+
+                    <CheckBox IsChecked="{Binding EnableFail2Ban}"
+                              Content="{Binding Loc[EnableFail2BanLabel]}" />
+
+                    <CheckBox IsChecked="{Binding VerifyDns}"
+                              Content="{Binding Loc[VerifyDnsLabel]}" />
+
+                    <CheckBox IsChecked="{Binding CheckPort}"
+                              Content="{Binding Loc[CheckPortLabel]}" />
+                </StackPanel>
+            </Border>
+
+            <!-- Card 6: Deploy Action & Log -->
+            <Border Classes="Card">
+                <StackPanel Spacing="14">
+
+                    <!-- Error Alert -->
+                    <Border IsVisible="{Binding ErrorMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                            Classes="BadgeDanger"
+                            Padding="12,8">
+                        <TextBlock Text="{Binding ErrorMessage}"
+                                   Foreground="#E81123"
+                                   TextWrapping="Wrap" />
+                    </Border>
+
+                    <!-- Success Alert -->
+                    <Border IsVisible="{Binding IsSuccess}"
+                            Classes="BadgeSuccess"
+                            Padding="12,8">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <TextBlock Text="{Binding StatusMessage}"
+                                       Foreground="#107C41"
+                                       FontWeight="Medium"
+                                       VerticalAlignment="Center" />
+                            <Button Grid.Column="1"
+                                    Classes="Primary"
+                                    Content="{Binding Loc[ShowQrButton]}"
+                                    Command="{Binding OpenClientQrCommand}" />
+                        </Grid>
+                    </Border>
+
+                    <!-- Deploy Button -->
+                    <Button Classes="Primary"
+                            HorizontalAlignment="Stretch"
+                            MinHeight="44"
+                            FontSize="15"
+                            IsEnabled="{Binding !IsDeploying}"
+                            Command="{Binding StartDeployCommand}">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <TextBlock Text="🚀" />
+                            <TextBlock Text="{Binding Loc[StartDeployButton]}"
+                                       IsVisible="{Binding !IsDeploying}" />
+                            <TextBlock Text="{Binding Loc[DeployingButton]}"
+                                       IsVisible="{Binding IsDeploying}" />
+                        </StackPanel>
+                    </Button>
+
+                    <ProgressBar IsIndeterminate="True"
+                                 IsVisible="{Binding IsDeploying}"
+                                 Height="4" />
+
+                    <!-- Live Logs Viewer -->
+                    <TextBlock Text="{Binding Loc[DeploymentLogsTitle]}" Classes="FieldLabel" Margin="0,8,0,0" />
+                    <Border Background="{DynamicResource ControlFillColorSecondaryBrush}"
+                            CornerRadius="6"
+                            Padding="10"
+                            Height="180">
+                        <ScrollViewer>
+                            <ItemsControl ItemsSource="{Binding DeploymentLogs}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding}"
+                                                   FontFamily="Consolas,Menlo,Monospace"
+                                                   FontSize="11"
+                                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                                   TextWrapping="Wrap" />
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </Border>
+
+                </StackPanel>
+            </Border>
+
+        </StackPanel>
+    </ScrollViewer>
+
+</UserControl>

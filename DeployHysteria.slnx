@@ -1,8 +1,11 @@
 <Solution>
   <Folder Name="/src/">
     <Project Path="src/DeployHysteria.Core/DeployHysteria.Core.csproj" />
+    <Project Path="src/DeployHysteria.UI/DeployHysteria.UI.csproj" />
+    <Project Path="src/DeployHysteria.Desktop/DeployHysteria.Desktop.csproj" />
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/DeployHysteria.Core.Tests/DeployHysteria.Core.Tests.csproj" />
+    <Project Path="tests/DeployHysteria.UI.Tests/DeployHysteria.UI.Tests.csproj" />
   </Folder>
 </Solution>

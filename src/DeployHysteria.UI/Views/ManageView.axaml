@@ -1,0 +1,283 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:DeployHysteria.UI.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="850" d:DesignHeight="1000"
+             x:Class="DeployHysteria.UI.Views.ManageView"
+             x:DataType="vm:ManageViewModel">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel MaxWidth="820" Margin="16" Spacing="16">
+
+            <!-- Error Banner -->
+            <Border IsVisible="{Binding ErrorMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                    Classes="BadgeDanger"
+                    Padding="12,8">
+                <TextBlock Text="{Binding ErrorMessage}"
+                           Foreground="#E81123"
+                           TextWrapping="Wrap" />
+            </Border>
+
+            <!-- Status Banner -->
+            <Border IsVisible="{Binding StatusMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                    Classes="BadgeSuccess"
+                    Padding="12,8">
+                <TextBlock Text="{Binding StatusMessage}"
+                           Foreground="#107C41"
+                           TextWrapping="Wrap" />
+            </Border>
+
+            <!-- 1. Connection Card (shown when NOT connected) -->
+            <Border Classes="Card" IsVisible="{Binding !IsConnected}">
+                <StackPanel Spacing="12">
+                    <TextBlock Text="{Binding Loc[ServerConnectionTitle]}" Classes="CardTitle" />
+
+                    <Grid ColumnDefinitions="*,Auto">
+                        <StackPanel Margin="0,0,10,0">
+                            <TextBlock Text="{Binding Loc[HostLabel]}" Classes="FieldLabel" />
+                            <TextBox Text="{Binding Host}"
+                                     PlaceholderText="{Binding Loc[HostWatermark]}" />
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="1" Width="100">
+                            <TextBlock Text="{Binding Loc[SshPortLabel]}" Classes="FieldLabel" />
+                            <NumericUpDown Value="{Binding SshPort}"
+                                           Minimum="1" Maximum="65535"
+                                           FormatString="0" />
+                        </StackPanel>
+                    </Grid>
+
+                    <StackPanel>
+                        <TextBlock Text="{Binding Loc[UsernameLabel]}" Classes="FieldLabel" />
+                        <TextBox Text="{Binding Username}"
+                                 PlaceholderText="{Binding Loc[UsernameWatermark]}" />
+                    </StackPanel>
+
+                    <StackPanel Spacing="6">
+                        <TextBlock Text="{Binding Loc[AuthTypeLabel]}" Classes="FieldLabel" />
+                        <StackPanel Orientation="Horizontal" Spacing="16">
+                            <RadioButton Content="{Binding Loc[AuthTypePassword]}"
+                                         IsChecked="{Binding AuthTypeIndex, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=0}"
+                                         Command="{Binding SelectPasswordAuthCommand}" />
+                            <RadioButton Content="{Binding Loc[AuthTypeKey]}"
+                                         IsChecked="{Binding AuthTypeIndex, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=1}"
+                                         Command="{Binding SelectKeyAuthCommand}" />
+                        </StackPanel>
+                    </StackPanel>
+
+                    <StackPanel IsVisible="{Binding AuthTypeIndex, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=0}">
+                        <TextBlock Text="{Binding Loc[PasswordLabel]}" Classes="FieldLabel" />
+                        <TextBox Text="{Binding Password}"
+                                 PasswordChar="●"
+                                 PlaceholderText="{Binding Loc[PasswordWatermark]}" />
+                    </StackPanel>
+
+                    <StackPanel IsVisible="{Binding AuthTypeIndex, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=1}">
+                        <TextBlock Text="{Binding Loc[SshKeyLabel]}" Classes="FieldLabel" />
+                        <TextBox Text="{Binding SshPrivateKey}"
+                                 AcceptsReturn="True"
+                                 Height="80"
+                                 PlaceholderText="{Binding Loc[SshKeyWatermark]}" />
+                    </StackPanel>
+
+                    <Button Classes="Primary"
+                            HorizontalAlignment="Stretch"
+                            MinHeight="40"
+                            Margin="0,8,0,0"
+                            IsEnabled="{Binding !IsLoading}"
+                            Command="{Binding ConnectCommand}">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <TextBlock Text="🔗" />
+                            <TextBlock Text="{Binding Loc[ConnectButton]}" IsVisible="{Binding !IsLoading}" />
+                            <TextBlock Text="{Binding Loc[ConnectingButton]}" IsVisible="{Binding IsLoading}" />
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </Border>
+
+            <!-- 2. Connected View -->
+            <StackPanel IsVisible="{Binding IsConnected}" Spacing="16">
+
+                <!-- Server Overview Status Card -->
+                <Border Classes="Card">
+                    <StackPanel Spacing="14">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <StackPanel Spacing="4">
+                                <TextBlock Text="{Binding Host, StringFormat='{}Server: {0}'}"
+                                           FontSize="16" FontWeight="SemiBold" />
+                                <TextBlock Text="{Binding RemoteDirectory, StringFormat='{}Path: {0}'}"
+                                           FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8">
+                                <Button Classes="Secondary"
+                                        Content="{Binding Loc[RefreshStatusButton]}"
+                                        Command="{Binding RefreshStatusCommand}" />
+                                <Button Classes="Secondary"
+                                        Content="{Binding Loc[RestartServiceButton]}"
+                                        Command="{Binding RestartServiceCommand}" />
+                                <Button Classes="Secondary"
+                                        Content="{Binding Loc[DisconnectButton]}"
+                                        Command="{Binding DisconnectCommand}" />
+                            </StackPanel>
+                        </Grid>
+
+                        <Separator Margin="0,-4,0,0" />
+
+                        <!-- Health indicators -->
+                        <Grid ColumnDefinitions="*,*,*">
+                            <!-- Container status -->
+                            <StackPanel Grid.Column="0" Spacing="4">
+                                <TextBlock Text="{Binding Loc[ContainerStatusLabel]}" Classes="FieldLabel" />
+                                <Border Classes="BadgeSuccess"
+                                        IsVisible="{Binding ContainerRunning}"
+                                        HorizontalAlignment="Left">
+                                    <TextBlock Text="{Binding Loc[StatusRunning]}" Foreground="#107C41" FontWeight="Medium" FontSize="12" />
+                                </Border>
+                                <Border Classes="BadgeDanger"
+                                        IsVisible="{Binding !ContainerRunning}"
+                                        HorizontalAlignment="Left">
+                                    <TextBlock Text="{Binding Loc[StatusStopped]}" Foreground="#E81123" FontWeight="Medium" FontSize="12" />
+                                </Border>
+                            </StackPanel>
+
+                            <!-- UFW Status -->
+                            <StackPanel Grid.Column="1" Spacing="4">
+                                <TextBlock Text="{Binding Loc[UfwStatusLabel]}" Classes="FieldLabel" />
+                                <TextBlock Text="{Binding UfwStatusText}"
+                                           FontSize="12"
+                                           MaxLines="1"
+                                           TextTrimming="CharacterEllipsis" />
+                            </StackPanel>
+
+                            <!-- Fail2Ban Status -->
+                            <StackPanel Grid.Column="2" Spacing="4">
+                                <TextBlock Text="{Binding Loc[Fail2BanStatusLabel]}" Classes="FieldLabel" />
+                                <TextBlock Text="{Binding Fail2BanStatusText}"
+                                           FontSize="12"
+                                           MaxLines="1"
+                                           TextTrimming="CharacterEllipsis" />
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <!-- Users Management Card -->
+                <Border Classes="Card">
+                    <StackPanel Spacing="14">
+                        <TextBlock Text="{Binding Loc[UsersSectionTitle]}" Classes="CardTitle" />
+
+                        <!-- Add User Form -->
+                        <Border Background="{DynamicResource ControlFillColorSecondaryBrush}"
+                                CornerRadius="8"
+                                Padding="12">
+                            <StackPanel Spacing="10">
+                                <TextBlock Text="{Binding Loc[AddUserButton]}" FontWeight="SemiBold" FontSize="13" />
+
+                                <Grid ColumnDefinitions="*,*,Auto,Auto">
+                                    <TextBox Grid.Column="0"
+                                             Text="{Binding NewUsername}"
+                                             Margin="0,0,6,0"
+                                             PlaceholderText="{Binding Loc[NewUsernameWatermark]}" />
+
+                                    <TextBox Grid.Column="1"
+                                             Text="{Binding NewUserPassword}"
+                                             Margin="0,0,6,0"
+                                             PlaceholderText="{Binding Loc[NewUserPasswordWatermark]}" />
+
+                                    <Button Grid.Column="2"
+                                            Classes="Secondary"
+                                            Margin="0,0,6,0"
+                                            Content="🎲"
+                                            ToolTip.Tip="{Binding Loc[GenerateButton]}"
+                                            Command="{Binding GenerateNewUserPasswordCommand}" />
+
+                                    <Button Grid.Column="3"
+                                            Classes="Primary"
+                                            Content="{Binding Loc[AddUserButton]}"
+                                            Command="{Binding AddUserCommand}" />
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Users List -->
+                        <ItemsControl ItemsSource="{Binding Users}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Margin="0,0,0,8"
+                                            Padding="12,10"
+                                            Background="{DynamicResource ControlFillColorSecondaryBrush}"
+                                            CornerRadius="6">
+                                        <Grid ColumnDefinitions="Auto,*,Auto,Auto">
+                                            <TextBlock Text="👤"
+                                                       VerticalAlignment="Center"
+                                                       Margin="0,0,10,0" />
+
+                                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                                <TextBlock Text="{Binding Username}"
+                                                           FontWeight="SemiBold"
+                                                           FontSize="14" />
+                                                <TextBlock Text="••••••••••••"
+                                                           FontSize="11"
+                                                           Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                                            </StackPanel>
+
+                                            <!-- Show QR / Link button -->
+                                            <Button Grid.Column="2"
+                                                    Classes="Secondary"
+                                                    Margin="0,0,8,0"
+                                                    Command="{Binding ShowQrCommand}">
+                                                <StackPanel Orientation="Horizontal" Spacing="6">
+                                                    <TextBlock Text="📱" />
+                                                    <TextBlock Text="QR &amp; Link" />
+                                                </StackPanel>
+                                            </Button>
+
+                                            <!-- Delete User button -->
+                                            <Button Grid.Column="3"
+                                                    Classes="Danger"
+                                                    Command="{Binding DeleteCommand}"
+                                                    Content="🗑️" />
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+
+                    </StackPanel>
+                </Border>
+
+                <!-- Logs Card -->
+                <Border Classes="Card">
+                    <StackPanel Spacing="10">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <TextBlock Text="{Binding Loc[ContainerLogsTitle]}" Classes="CardTitle" />
+                            <Button Grid.Column="1"
+                                    Classes="Secondary"
+                                    Content="{Binding Loc[RefreshLogsButton]}"
+                                    Command="{Binding RefreshLogsCommand}" />
+                        </Grid>
+
+                        <Border Background="{DynamicResource ControlFillColorSecondaryBrush}"
+                                CornerRadius="6"
+                                Padding="10"
+                                Height="200">
+                            <ScrollViewer>
+                                <TextBox Text="{Binding ContainerLogs}"
+                                         IsReadOnly="True"
+                                         FontFamily="Consolas,Menlo,Monospace"
+                                         FontSize="11"
+                                         AcceptsReturn="True"
+                                         TextWrapping="Wrap" />
+                            </ScrollViewer>
+                        </Border>
+                    </StackPanel>
+                </Border>
+
+            </StackPanel>
+
+        </StackPanel>
+    </ScrollViewer>
+
+</UserControl>

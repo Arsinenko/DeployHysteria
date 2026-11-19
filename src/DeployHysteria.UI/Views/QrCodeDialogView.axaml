@@ -1,0 +1,117 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:DeployHysteria.UI.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="600"
+             x:Class="DeployHysteria.UI.Views.QrCodeDialogView"
+             x:DataType="vm:QrCodeDialogViewModel"
+             IsVisible="{Binding IsOpen, FallbackValue=False}">
+
+    <Grid>
+        <!-- Backdrop dim -->
+        <Border Background="#99000000" />
+
+        <!-- Dialog Card -->
+        <Border Classes="Card"
+                Width="480"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                CornerRadius="12"
+                Padding="24"
+                BoxShadow="0 8 32 0 #44000000">
+
+            <StackPanel Spacing="16">
+                <!-- Header -->
+                <Grid ColumnDefinitions="*,Auto">
+                    <StackPanel Spacing="2">
+                        <TextBlock Text="{Binding Loc[DialogTitleQr]}"
+                                   FontSize="17"
+                                   FontWeight="SemiBold" />
+                        <TextBlock Text="{Binding Username, StringFormat='{}User: {0}'}"
+                                   FontSize="13"
+                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                    </StackPanel>
+
+                    <Button Grid.Column="1"
+                            Classes="Secondary"
+                            Content="✕"
+                            Padding="8,4"
+                            Command="{Binding CloseCommand}" />
+                </Grid>
+
+                <Separator Margin="0,-4,0,0" />
+
+                <!-- QR Code Image -->
+                <Border Background="White"
+                        CornerRadius="8"
+                        Padding="12"
+                        HorizontalAlignment="Center"
+                        BorderBrush="{DynamicResource ControlStrokeColorDefaultBrush}"
+                        BorderThickness="1">
+                    <Image Source="{Binding QrBitmap}"
+                           Width="200"
+                           Height="200"
+                           Stretch="Uniform" />
+                </Border>
+
+                <!-- URI box -->
+                <StackPanel Spacing="4">
+                    <TextBlock Text="URI Link:"
+                               Classes="FieldLabel" />
+                    <Grid ColumnDefinitions="*,Auto">
+                        <TextBox Text="{Binding Uri}"
+                                 IsReadOnly="True"
+                                 CornerRadius="6,0,0,6"
+                                 FontSize="11" />
+                        <Button Grid.Column="1"
+                                Classes="Primary"
+                                CornerRadius="0,6,6,0"
+                                Content="📋"
+                                ToolTip.Tip="{Binding Loc[CopyLinkButton]}"
+                                Command="{Binding CopyUriCommand}" />
+                    </Grid>
+                </StackPanel>
+
+                <!-- Actions -->
+                <Grid ColumnDefinitions="*,*,*">
+                    <Button Grid.Column="0"
+                            Classes="Secondary"
+                            Margin="0,0,4,0"
+                            HorizontalAlignment="Stretch"
+                            Command="{Binding CopyUriCommand}">
+                        <TextBlock Text="{Binding Loc[CopyLinkButton]}" FontSize="12" TextWrapping="Wrap" TextAlignment="Center" />
+                    </Button>
+
+                    <Button Grid.Column="1"
+                            Classes="Secondary"
+                            Margin="4,0,4,0"
+                            HorizontalAlignment="Stretch"
+                            Command="{Binding SaveQrImageCommand}">
+                        <TextBlock Text="{Binding Loc[SaveQrImageButton]}" FontSize="12" TextWrapping="Wrap" TextAlignment="Center" />
+                    </Button>
+
+                    <Button Grid.Column="2"
+                            Classes="Secondary"
+                            Margin="4,0,0,0"
+                            HorizontalAlignment="Stretch"
+                            Command="{Binding ExportTextConfigCommand}">
+                        <TextBlock Text="{Binding Loc[ExportTxtButton]}" FontSize="12" TextWrapping="Wrap" TextAlignment="Center" />
+                    </Button>
+                </Grid>
+
+                <!-- Notification Alert -->
+                <Border IsVisible="{Binding NotificationMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                        Classes="BadgeSuccess"
+                        HorizontalAlignment="Center">
+                    <TextBlock Text="{Binding NotificationMessage}"
+                               Foreground="#107C41"
+                               FontWeight="Medium"
+                               FontSize="12" />
+                </Border>
+
+            </StackPanel>
+        </Border>
+    </Grid>
+
+</UserControl>
