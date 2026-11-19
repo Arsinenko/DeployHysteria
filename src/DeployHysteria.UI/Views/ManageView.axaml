@@ -7,8 +7,182 @@
              x:Class="DeployHysteria.UI.Views.ManageView"
              x:DataType="vm:ManageViewModel">
 
+    <UserControl.Styles>
+        <Style Selector="StackPanel.PrimaryField">
+            <Setter Property="Grid.Row" Value="0" />
+            <Setter Property="Grid.Column" Value="0" />
+            <Setter Property="Grid.ColumnSpan" Value="1" />
+            <Setter Property="Margin" Value="0,0,10,0" />
+        </Style>
+        <Style Selector=":is(UserControl).compact StackPanel.PrimaryField">
+            <Setter Property="Grid.ColumnSpan" Value="2" />
+            <Setter Property="Margin" Value="0" />
+        </Style>
+
+        <Style Selector="StackPanel.PortField">
+            <Setter Property="Grid.Row" Value="0" />
+            <Setter Property="Grid.Column" Value="1" />
+            <Setter Property="Grid.ColumnSpan" Value="1" />
+            <Setter Property="MinWidth" Value="110" />
+            <Setter Property="Margin" Value="0" />
+        </Style>
+        <Style Selector=":is(UserControl).compact StackPanel.PortField">
+            <Setter Property="Grid.Row" Value="1" />
+            <Setter Property="Grid.Column" Value="0" />
+            <Setter Property="Grid.ColumnSpan" Value="2" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="Margin" Value="0,10,0,0" />
+        </Style>
+
+        <Style Selector="StackPanel.ServerInfoHeader">
+            <Setter Property="Grid.Row" Value="0" />
+            <Setter Property="Grid.Column" Value="0" />
+            <Setter Property="Grid.ColumnSpan" Value="1" />
+        </Style>
+        <Style Selector=":is(UserControl).compact StackPanel.ServerInfoHeader">
+            <Setter Property="Grid.ColumnSpan" Value="2" />
+        </Style>
+
+        <Style Selector="WrapPanel.ServerActions">
+            <Setter Property="Grid.Row" Value="0" />
+            <Setter Property="Grid.Column" Value="1" />
+            <Setter Property="Grid.ColumnSpan" Value="1" />
+            <Setter Property="HorizontalAlignment" Value="Right" />
+            <Setter Property="Margin" Value="12,0,0,0" />
+        </Style>
+        <Style Selector=":is(UserControl).compact WrapPanel.ServerActions">
+            <Setter Property="Grid.Row" Value="1" />
+            <Setter Property="Grid.Column" Value="0" />
+            <Setter Property="Grid.ColumnSpan" Value="2" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="Margin" Value="0,10,0,0" />
+        </Style>
+
+        <Style Selector="StackPanel.HealthCol0">
+            <Setter Property="Grid.Row" Value="0" />
+            <Setter Property="Grid.Column" Value="0" />
+            <Setter Property="Grid.ColumnSpan" Value="1" />
+            <Setter Property="Margin" Value="0,0,8,0" />
+        </Style>
+        <Style Selector=":is(UserControl).compact StackPanel.HealthCol0">
+            <Setter Property="Grid.ColumnSpan" Value="3" />
+            <Setter Property="Margin" Value="0,0,0,8" />
+        </Style>
+
+        <Style Selector="StackPanel.HealthCol1">
+            <Setter Property="Grid.Row" Value="0" />
+            <Setter Property="Grid.Column" Value="1" />
+            <Setter Property="Grid.ColumnSpan" Value="1" />
+            <Setter Property="Margin" Value="4,0,4,0" />
+        </Style>
+        <Style Selector=":is(UserControl).compact StackPanel.HealthCol1">
+            <Setter Property="Grid.Row" Value="1" />
+            <Setter Property="Grid.Column" Value="0" />
+            <Setter Property="Grid.ColumnSpan" Value="3" />
+            <Setter Property="Margin" Value="0,0,0,8" />
+        </Style>
+
+        <Style Selector="StackPanel.HealthCol2">
+            <Setter Property="Grid.Row" Value="0" />
+            <Setter Property="Grid.Column" Value="2" />
+            <Setter Property="Grid.ColumnSpan" Value="1" />
+            <Setter Property="Margin" Value="8,0,0,0" />
+        </Style>
+        <Style Selector=":is(UserControl).compact StackPanel.HealthCol2">
+            <Setter Property="Grid.Row" Value="2" />
+            <Setter Property="Grid.Column" Value="0" />
+            <Setter Property="Grid.ColumnSpan" Value="3" />
+            <Setter Property="Margin" Value="0" />
+        </Style>
+
+        <Style Selector="TextBox.AddUserName">
+            <Setter Property="Grid.Row" Value="0" />
+            <Setter Property="Grid.Column" Value="0" />
+            <Setter Property="Grid.ColumnSpan" Value="1" />
+            <Setter Property="Margin" Value="0,0,6,0" />
+        </Style>
+        <Style Selector=":is(UserControl).compact TextBox.AddUserName">
+            <Setter Property="Grid.ColumnSpan" Value="4" />
+            <Setter Property="Margin" Value="0,0,0,8" />
+        </Style>
+
+        <Style Selector="TextBox.AddUserPass">
+            <Setter Property="Grid.Row" Value="0" />
+            <Setter Property="Grid.Column" Value="1" />
+            <Setter Property="Grid.ColumnSpan" Value="1" />
+            <Setter Property="Margin" Value="0,0,6,0" />
+        </Style>
+        <Style Selector=":is(UserControl).compact TextBox.AddUserPass">
+            <Setter Property="Grid.Row" Value="1" />
+            <Setter Property="Grid.Column" Value="0" />
+            <Setter Property="Grid.ColumnSpan" Value="3" />
+            <Setter Property="Margin" Value="0,0,6,8" />
+        </Style>
+
+        <Style Selector="Button.AddUserGen">
+            <Setter Property="Grid.Row" Value="0" />
+            <Setter Property="Grid.Column" Value="2" />
+            <Setter Property="Grid.ColumnSpan" Value="1" />
+            <Setter Property="Margin" Value="0,0,6,0" />
+        </Style>
+        <Style Selector=":is(UserControl).compact Button.AddUserGen">
+            <Setter Property="Grid.Row" Value="1" />
+            <Setter Property="Grid.Column" Value="3" />
+            <Setter Property="Margin" Value="0,0,0,8" />
+        </Style>
+
+        <Style Selector="Button.AddUserSubmit">
+            <Setter Property="Grid.Row" Value="0" />
+            <Setter Property="Grid.Column" Value="3" />
+            <Setter Property="Grid.ColumnSpan" Value="1" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="Margin" Value="0" />
+        </Style>
+        <Style Selector=":is(UserControl).compact Button.AddUserSubmit">
+            <Setter Property="Grid.Row" Value="2" />
+            <Setter Property="Grid.Column" Value="0" />
+            <Setter Property="Grid.ColumnSpan" Value="4" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="Margin" Value="0" />
+        </Style>
+
+        <Style Selector="StackPanel.UserItemInfo">
+            <Setter Property="Grid.Row" Value="0" />
+            <Setter Property="Grid.Column" Value="1" />
+            <Setter Property="Grid.ColumnSpan" Value="1" />
+        </Style>
+        <Style Selector=":is(UserControl).compact StackPanel.UserItemInfo">
+            <Setter Property="Grid.ColumnSpan" Value="3" />
+        </Style>
+
+        <Style Selector="Button.UserItemQr">
+            <Setter Property="Grid.Row" Value="0" />
+            <Setter Property="Grid.Column" Value="2" />
+            <Setter Property="Grid.ColumnSpan" Value="1" />
+            <Setter Property="HorizontalAlignment" Value="Right" />
+            <Setter Property="Margin" Value="0,0,8,0" />
+        </Style>
+        <Style Selector=":is(UserControl).compact Button.UserItemQr">
+            <Setter Property="Grid.Row" Value="1" />
+            <Setter Property="Grid.Column" Value="1" />
+            <Setter Property="Grid.ColumnSpan" Value="2" />
+            <Setter Property="Margin" Value="0,8,8,0" />
+        </Style>
+
+        <Style Selector="Button.UserItemDelete">
+            <Setter Property="Grid.Row" Value="0" />
+            <Setter Property="Grid.Column" Value="3" />
+            <Setter Property="Margin" Value="0" />
+        </Style>
+        <Style Selector=":is(UserControl).compact Button.UserItemDelete">
+            <Setter Property="Grid.Row" Value="1" />
+            <Setter Property="Grid.Column" Value="3" />
+            <Setter Property="Margin" Value="0,8,0,0" />
+        </Style>
+    </UserControl.Styles>
+
     <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <StackPanel MaxWidth="820" Margin="16" Spacing="16">
+        <StackPanel Classes="PageContainer" MaxWidth="820">
 
             <!-- Error Banner -->
             <Border IsVisible="{Binding ErrorMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
@@ -33,52 +207,59 @@
                 <StackPanel Spacing="12">
                     <TextBlock Text="{Binding Loc[ServerConnectionTitle]}" Classes="CardTitle" />
 
-                    <Grid ColumnDefinitions="*,Auto">
-                        <StackPanel Margin="0,0,10,0">
+                    <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto">
+                        <StackPanel Classes="PrimaryField">
                             <TextBlock Text="{Binding Loc[HostLabel]}" Classes="FieldLabel" />
                             <TextBox Text="{Binding Host}"
-                                     PlaceholderText="{Binding Loc[HostWatermark]}" />
+                                     PlaceholderText="{Binding Loc[HostWatermark]}"
+                                     ToolTip.Tip="{Binding Loc[HostTooltip]}" />
                         </StackPanel>
 
-                        <StackPanel Grid.Column="1" Width="100">
+                        <StackPanel Classes="PortField">
                             <TextBlock Text="{Binding Loc[SshPortLabel]}" Classes="FieldLabel" />
                             <NumericUpDown Value="{Binding SshPort}"
                                            Minimum="1" Maximum="65535"
-                                           FormatString="0" />
+                                           FormatString="0"
+                                           ToolTip.Tip="{Binding Loc[SshPortTooltip]}" />
                         </StackPanel>
                     </Grid>
 
                     <StackPanel>
                         <TextBlock Text="{Binding Loc[UsernameLabel]}" Classes="FieldLabel" />
                         <TextBox Text="{Binding Username}"
-                                 PlaceholderText="{Binding Loc[UsernameWatermark]}" />
+                                 PlaceholderText="{Binding Loc[UsernameWatermark]}"
+                                 ToolTip.Tip="{Binding Loc[UsernameTooltip]}" />
                     </StackPanel>
 
                     <StackPanel Spacing="6">
                         <TextBlock Text="{Binding Loc[AuthTypeLabel]}" Classes="FieldLabel" />
                         <StackPanel Orientation="Horizontal" Spacing="16">
-                            <RadioButton Content="{Binding Loc[AuthTypePassword]}"
-                                         IsChecked="{Binding AuthTypeIndex, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=0}"
+                            <RadioButton GroupName="ManageAuthMethod"
+                                         Content="{Binding Loc[AuthTypePassword]}"
+                                         IsChecked="{Binding IsPasswordAuth, Mode=OneWay}"
                                          Command="{Binding SelectPasswordAuthCommand}" />
-                            <RadioButton Content="{Binding Loc[AuthTypeKey]}"
-                                         IsChecked="{Binding AuthTypeIndex, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=1}"
+                            <RadioButton GroupName="ManageAuthMethod"
+                                         Content="{Binding Loc[AuthTypeKey]}"
+                                         IsChecked="{Binding IsKeyAuth, Mode=OneWay}"
                                          Command="{Binding SelectKeyAuthCommand}" />
                         </StackPanel>
                     </StackPanel>
 
-                    <StackPanel IsVisible="{Binding AuthTypeIndex, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=0}">
+                    <StackPanel IsVisible="{Binding IsPasswordAuth}">
                         <TextBlock Text="{Binding Loc[PasswordLabel]}" Classes="FieldLabel" />
                         <TextBox Text="{Binding Password}"
                                  PasswordChar="●"
-                                 PlaceholderText="{Binding Loc[PasswordWatermark]}" />
+                                 PlaceholderText="{Binding Loc[PasswordWatermark]}"
+                                 ToolTip.Tip="{Binding Loc[PasswordTooltip]}" />
                     </StackPanel>
 
-                    <StackPanel IsVisible="{Binding AuthTypeIndex, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=1}">
+                    <StackPanel IsVisible="{Binding IsKeyAuth}">
                         <TextBlock Text="{Binding Loc[SshKeyLabel]}" Classes="FieldLabel" />
                         <TextBox Text="{Binding SshPrivateKey}"
                                  AcceptsReturn="True"
                                  Height="80"
-                                 PlaceholderText="{Binding Loc[SshKeyWatermark]}" />
+                                 PlaceholderText="{Binding Loc[SshKeyWatermark]}"
+                                 ToolTip.Tip="{Binding Loc[SshKeyTooltip]}" />
                     </StackPanel>
 
                     <Button Classes="Primary"
@@ -97,38 +278,76 @@
             </Border>
 
             <!-- 2. Connected View -->
-            <StackPanel IsVisible="{Binding IsConnected}" Spacing="16">
+            <StackPanel IsVisible="{Binding IsConnected}" Spacing="14">
 
                 <!-- Server Overview Status Card -->
                 <Border Classes="Card">
                     <StackPanel Spacing="14">
-                        <Grid ColumnDefinitions="*,Auto">
-                            <StackPanel Spacing="4">
+                        <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto">
+                            <StackPanel Classes="ServerInfoHeader" Spacing="4">
                                 <TextBlock Text="{Binding Host, StringFormat='{}Server: {0}'}"
-                                           FontSize="16" FontWeight="SemiBold" />
+                                           FontSize="16" FontWeight="SemiBold"
+                                           TextWrapping="Wrap"
+                                           Foreground="{DynamicResource PrimaryTextBrush}" />
                                 <TextBlock Text="{Binding RemoteDirectory, StringFormat='{}Path: {0}'}"
-                                           FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                                           FontSize="12"
+                                           TextWrapping="Wrap"
+                                           Foreground="{DynamicResource SecondaryTextBrush}" />
                             </StackPanel>
 
-                            <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8">
+                            <WrapPanel Classes="ServerActions" Orientation="Horizontal">
                                 <Button Classes="Secondary"
+                                        Margin="0,0,8,6"
                                         Content="{Binding Loc[RefreshStatusButton]}"
                                         Command="{Binding RefreshStatusCommand}" />
                                 <Button Classes="Secondary"
+                                        Margin="0,0,8,6"
                                         Content="{Binding Loc[RestartServiceButton]}"
                                         Command="{Binding RestartServiceCommand}" />
                                 <Button Classes="Secondary"
+                                        Margin="0,0,0,6"
                                         Content="{Binding Loc[DisconnectButton]}"
                                         Command="{Binding DisconnectCommand}" />
-                            </StackPanel>
+                            </WrapPanel>
                         </Grid>
 
                         <Separator Margin="0,-4,0,0" />
 
-                        <!-- Health indicators -->
-                        <Grid ColumnDefinitions="*,*,*">
+                        <!-- Summary & Expand Toggle Row -->
+                        <Grid ColumnDefinitions="Auto,*,Auto">
+                            <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                                <Border Classes="BadgeSuccess"
+                                        IsVisible="{Binding ContainerRunning}">
+                                    <TextBlock Text="{Binding Loc[StatusRunning]}" Foreground="#107C41" FontWeight="Medium" FontSize="12" />
+                                </Border>
+                                <Border Classes="BadgeDanger"
+                                        IsVisible="{Binding !ContainerRunning}">
+                                    <TextBlock Text="{Binding Loc[StatusStopped]}" Foreground="#E81123" FontWeight="Medium" FontSize="12" />
+                                </Border>
+                            </StackPanel>
+
+                            <Button Grid.Column="2"
+                                    Classes="Secondary"
+                                    Padding="10,4"
+                                    MinHeight="28"
+                                    Command="{Binding ToggleStatusExpandedCommand}">
+                                <Panel>
+                                    <TextBlock Text="{Binding Loc[ShowStatusDetailsButton]}"
+                                               FontSize="12"
+                                               IsVisible="{Binding !IsStatusExpanded}" />
+                                    <TextBlock Text="{Binding Loc[HideStatusDetailsButton]}"
+                                               FontSize="12"
+                                               IsVisible="{Binding IsStatusExpanded}" />
+                                </Panel>
+                            </Button>
+                        </Grid>
+
+                        <!-- Collapsible Health indicators -->
+                        <Grid IsVisible="{Binding IsStatusExpanded}"
+                              ColumnDefinitions="*,*,*"
+                              RowDefinitions="Auto,Auto,Auto">
                             <!-- Container status -->
-                            <StackPanel Grid.Column="0" Spacing="4">
+                            <StackPanel Classes="HealthCol0" Spacing="4">
                                 <TextBlock Text="{Binding Loc[ContainerStatusLabel]}" Classes="FieldLabel" />
                                 <Border Classes="BadgeSuccess"
                                         IsVisible="{Binding ContainerRunning}"
@@ -143,21 +362,19 @@
                             </StackPanel>
 
                             <!-- UFW Status -->
-                            <StackPanel Grid.Column="1" Spacing="4">
+                            <StackPanel Classes="HealthCol1" Spacing="4">
                                 <TextBlock Text="{Binding Loc[UfwStatusLabel]}" Classes="FieldLabel" />
                                 <TextBlock Text="{Binding UfwStatusText}"
                                            FontSize="12"
-                                           MaxLines="1"
-                                           TextTrimming="CharacterEllipsis" />
+                                           TextWrapping="Wrap" />
                             </StackPanel>
 
                             <!-- Fail2Ban Status -->
-                            <StackPanel Grid.Column="2" Spacing="4">
+                            <StackPanel Classes="HealthCol2" Spacing="4">
                                 <TextBlock Text="{Binding Loc[Fail2BanStatusLabel]}" Classes="FieldLabel" />
                                 <TextBlock Text="{Binding Fail2BanStatusText}"
                                            FontSize="12"
-                                           MaxLines="1"
-                                           TextTrimming="CharacterEllipsis" />
+                                           TextWrapping="Wrap" />
                             </StackPanel>
                         </Grid>
                     </StackPanel>
@@ -169,32 +386,29 @@
                         <TextBlock Text="{Binding Loc[UsersSectionTitle]}" Classes="CardTitle" />
 
                         <!-- Add User Form -->
-                        <Border Background="{DynamicResource ControlFillColorSecondaryBrush}"
+                        <Border Background="{DynamicResource SubtleFillBrush}"
+                                BorderBrush="{DynamicResource CardBorderBrush}"
+                                BorderThickness="1"
                                 CornerRadius="8"
                                 Padding="12">
                             <StackPanel Spacing="10">
                                 <TextBlock Text="{Binding Loc[AddUserButton]}" FontWeight="SemiBold" FontSize="13" />
 
-                                <Grid ColumnDefinitions="*,*,Auto,Auto">
-                                    <TextBox Grid.Column="0"
+                                <Grid ColumnDefinitions="*,*,Auto,Auto" RowDefinitions="Auto,Auto,Auto">
+                                    <TextBox Classes="AddUserName"
                                              Text="{Binding NewUsername}"
-                                             Margin="0,0,6,0"
                                              PlaceholderText="{Binding Loc[NewUsernameWatermark]}" />
 
-                                    <TextBox Grid.Column="1"
+                                    <TextBox Classes="AddUserPass"
                                              Text="{Binding NewUserPassword}"
-                                             Margin="0,0,6,0"
                                              PlaceholderText="{Binding Loc[NewUserPasswordWatermark]}" />
 
-                                    <Button Grid.Column="2"
-                                            Classes="Secondary"
-                                            Margin="0,0,6,0"
+                                    <Button Classes="Secondary AddUserGen"
                                             Content="🎲"
                                             ToolTip.Tip="{Binding Loc[GenerateButton]}"
                                             Command="{Binding GenerateNewUserPasswordCommand}" />
 
-                                    <Button Grid.Column="3"
-                                            Classes="Primary"
+                                    <Button Classes="Primary AddUserSubmit"
                                             Content="{Binding Loc[AddUserButton]}"
                                             Command="{Binding AddUserCommand}" />
                                 </Grid>
@@ -207,26 +421,29 @@
                                 <DataTemplate>
                                     <Border Margin="0,0,0,8"
                                             Padding="12,10"
-                                            Background="{DynamicResource ControlFillColorSecondaryBrush}"
+                                            Background="{DynamicResource SubtleFillBrush}"
+                                            BorderBrush="{DynamicResource CardBorderBrush}"
+                                            BorderThickness="1"
                                             CornerRadius="6">
-                                        <Grid ColumnDefinitions="Auto,*,Auto,Auto">
-                                            <TextBlock Text="👤"
+                                        <Grid ColumnDefinitions="Auto,*,Auto,Auto" RowDefinitions="Auto,Auto">
+                                            <TextBlock Grid.Row="0" Grid.Column="0"
+                                                       Text="👤"
                                                        VerticalAlignment="Center"
                                                        Margin="0,0,10,0" />
 
-                                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                            <StackPanel Classes="UserItemInfo" VerticalAlignment="Center">
                                                 <TextBlock Text="{Binding Username}"
                                                            FontWeight="SemiBold"
-                                                           FontSize="14" />
+                                                           FontSize="14"
+                                                           TextTrimming="CharacterEllipsis"
+                                                           Foreground="{DynamicResource PrimaryTextBrush}" />
                                                 <TextBlock Text="••••••••••••"
                                                            FontSize="11"
-                                                           Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                                                           Foreground="{DynamicResource SecondaryTextBrush}" />
                                             </StackPanel>
 
                                             <!-- Show QR / Link button -->
-                                            <Button Grid.Column="2"
-                                                    Classes="Secondary"
-                                                    Margin="0,0,8,0"
+                                            <Button Classes="Secondary UserItemQr"
                                                     Command="{Binding ShowQrCommand}">
                                                 <StackPanel Orientation="Horizontal" Spacing="6">
                                                     <TextBlock Text="📱" />
@@ -235,8 +452,7 @@
                                             </Button>
 
                                             <!-- Delete User button -->
-                                            <Button Grid.Column="3"
-                                                    Classes="Danger"
+                                            <Button Classes="Danger UserItemDelete"
                                                     Command="{Binding DeleteCommand}"
                                                     Content="🗑️" />
                                         </Grid>
@@ -252,14 +468,20 @@
                 <Border Classes="Card">
                     <StackPanel Spacing="10">
                         <Grid ColumnDefinitions="*,Auto">
-                            <TextBlock Text="{Binding Loc[ContainerLogsTitle]}" Classes="CardTitle" />
+                            <TextBlock Text="{Binding Loc[ContainerLogsTitle]}"
+                                       Classes="CardTitle"
+                                       TextWrapping="Wrap"
+                                       VerticalAlignment="Center"
+                                       Margin="0,0,8,0" />
                             <Button Grid.Column="1"
                                     Classes="Secondary"
                                     Content="{Binding Loc[RefreshLogsButton]}"
                                     Command="{Binding RefreshLogsCommand}" />
                         </Grid>
 
-                        <Border Background="{DynamicResource ControlFillColorSecondaryBrush}"
+                        <Border Background="{DynamicResource SubtleFillBrush}"
+                                BorderBrush="{DynamicResource CardBorderBrush}"
+                                BorderThickness="1"
                                 CornerRadius="6"
                                 Padding="10"
                                 Height="200">

@@ -8,57 +8,114 @@
              x:Class="DeployHysteria.UI.Views.MainView"
              x:DataType="vm:MainViewModel">
 
-    <Grid RowDefinitions="Auto,*">
+    <UserControl.Styles>
+        <Style Selector="Border.AppHeader">
+            <Setter Property="Padding" Value="16,12" />
+        </Style>
+        <Style Selector=":is(UserControl).compact Border.AppHeader">
+            <Setter Property="Padding" Value="12,10" />
+        </Style>
+
+        <Style Selector="StackPanel.HeaderBrand">
+            <Setter Property="Grid.Row" Value="0" />
+            <Setter Property="Grid.Column" Value="0" />
+            <Setter Property="Grid.ColumnSpan" Value="1" />
+        </Style>
+        <Style Selector=":is(UserControl).compact StackPanel.HeaderBrand">
+            <Setter Property="Grid.ColumnSpan" Value="2" />
+        </Style>
+
+        <Style Selector="Grid.HeaderTabs">
+            <Setter Property="Grid.Row" Value="0" />
+            <Setter Property="Grid.Column" Value="1" />
+            <Setter Property="Grid.ColumnSpan" Value="1" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="Margin" Value="12,0" />
+        </Style>
+        <Style Selector=":is(UserControl).compact Grid.HeaderTabs">
+            <Setter Property="Grid.Row" Value="1" />
+            <Setter Property="Grid.Column" Value="0" />
+            <Setter Property="Grid.ColumnSpan" Value="3" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="Margin" Value="0,10,0,0" />
+        </Style>
+
+        <Style Selector=":is(UserControl).compact Button.TabButton">
+            <Setter Property="Padding" Value="10,8" />
+            <Setter Property="MinHeight" Value="38" />
+            <Setter Property="FontSize" Value="13" />
+        </Style>
+    </UserControl.Styles>
+
+    <Grid RowDefinitions="Auto,*" Background="{DynamicResource AppBackgroundBrush}">
 
         <!-- Top Header Navigation -->
         <Border Grid.Row="0"
-                Background="{DynamicResource SolidBackgroundFillColorBaseBrush}"
-                BorderBrush="{DynamicResource ControlStrokeColorDefaultBrush}"
-                BorderThickness="0,0,0,1"
-                Padding="16,12">
-            <Grid ColumnDefinitions="Auto,*,Auto">
+                Classes="AppHeader"
+                Background="{DynamicResource HeaderBackgroundBrush}"
+                BorderBrush="{DynamicResource CardBorderBrush}"
+                BorderThickness="0,0,0,1">
+            <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,*,Auto">
 
                 <!-- Logo & Title -->
-                <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+                <StackPanel Classes="HeaderBrand"
+                            Orientation="Horizontal"
+                            Spacing="10"
+                            VerticalAlignment="Center">
                     <TextBlock Text="⚡" FontSize="20" VerticalAlignment="Center" />
-                    <StackPanel Spacing="0">
+                    <StackPanel Spacing="0" VerticalAlignment="Center">
                         <TextBlock Text="{Binding Loc[AppTitle]}"
                                    FontWeight="Bold"
-                                   FontSize="16" />
+                                   FontSize="16"
+                                   TextTrimming="CharacterEllipsis"
+                                   Foreground="{DynamicResource PrimaryTextBrush}" />
                         <TextBlock Text="{Binding Loc[AppSubtitle]}"
                                    FontSize="11"
-                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                                   TextTrimming="CharacterEllipsis"
+                                   Foreground="{DynamicResource SecondaryTextBrush}" />
                     </StackPanel>
                 </StackPanel>
 
                 <!-- Navigation Tabs -->
-                <StackPanel Grid.Column="1"
-                            Orientation="Horizontal"
-                            HorizontalAlignment="Center"
-                            Spacing="8">
-                    <Button Classes="Secondary"
-                            CornerRadius="20"
-                            Padding="16,6"
+                <Grid Classes="HeaderTabs"
+                      ColumnDefinitions="*,*"
+                      VerticalAlignment="Center">
+                    <Button Grid.Column="0"
+                            Classes="TabButton"
+                            Classes.Active="{Binding IsDeployTabSelected}"
+                            HorizontalAlignment="Stretch"
+                            Margin="0,0,4,0"
                             Command="{Binding SetDeployTabCommand}">
-                        <StackPanel Orientation="Horizontal" Spacing="6">
+                        <StackPanel Orientation="Horizontal" Spacing="6" HorizontalAlignment="Center">
                             <TextBlock Text="🚀" />
-                            <TextBlock Text="{Binding Loc[TabDeploy]}" FontWeight="SemiBold" />
+                            <TextBlock Text="{Binding Loc[TabDeploy]}"
+                                       FontWeight="SemiBold"
+                                       TextTrimming="CharacterEllipsis" />
                         </StackPanel>
                     </Button>
 
-                    <Button Classes="Secondary"
-                            CornerRadius="20"
-                            Padding="16,6"
+                    <Button Grid.Column="1"
+                            Classes="TabButton"
+                            Classes.Active="{Binding IsManageTabSelected}"
+                            HorizontalAlignment="Stretch"
+                            Margin="4,0,0,0"
                             Command="{Binding SetManageTabCommand}">
-                        <StackPanel Orientation="Horizontal" Spacing="6">
+                        <StackPanel Orientation="Horizontal" Spacing="6" HorizontalAlignment="Center">
                             <TextBlock Text="⚙️" />
-                            <TextBlock Text="{Binding Loc[TabManage]}" FontWeight="SemiBold" />
+                            <TextBlock Text="{Binding Loc[TabManage]}"
+                                       FontWeight="SemiBold"
+                                       TextTrimming="CharacterEllipsis" />
                         </StackPanel>
                     </Button>
-                </StackPanel>
+                </Grid>
 
                 <!-- Right Tools (Language Switcher) -->
-                <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                <StackPanel Grid.Row="0" Grid.Column="2"
+                            Orientation="Horizontal"
+                            Spacing="8"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Right"
+                            Margin="8,0,0,0">
                     <Button Classes="Secondary"
                             CornerRadius="16"
                             Padding="10,4"
@@ -77,15 +134,19 @@
         <!-- Main Tab Content -->
         <Panel Grid.Row="1">
             <!-- Deploy Tab -->
-            <views:DeployView DataContext="{Binding Deploy}"
-                              IsVisible="{Binding $parent[UserControl].((vm:MainViewModel)DataContext).SelectedTabIndex, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=0}" />
+            <Panel IsVisible="{Binding IsDeployTabSelected}">
+                <views:DeployView DataContext="{Binding Deploy}" />
+            </Panel>
 
             <!-- Manage Tab -->
-            <views:ManageView DataContext="{Binding Manage}"
-                              IsVisible="{Binding $parent[UserControl].((vm:MainViewModel)DataContext).SelectedTabIndex, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=1}" />
+            <Panel IsVisible="{Binding IsManageTabSelected}">
+                <views:ManageView DataContext="{Binding Manage}" />
+            </Panel>
 
             <!-- Modal QR Dialog -->
-            <views:QrCodeDialogView DataContext="{Binding ActiveQrDialog}" />
+            <Panel IsVisible="{Binding HasActiveQrDialog}">
+                <views:QrCodeDialogView DataContext="{Binding ActiveQrDialog}" />
+            </Panel>
         </Panel>
 
     </Grid>

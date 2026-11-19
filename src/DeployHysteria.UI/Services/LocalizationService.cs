@@ -160,6 +160,8 @@ public class LocalizationService : ILocalizationService
         ["ExportTxtButton"] = "Экспорт настроек (.txt)",
         ["RefreshStatusButton"] = "Обновить статус",
         ["RestartServiceButton"] = "Перезапустить Hysteria",
+        ["ShowStatusDetailsButton"] = "Подробнее (UFW / Fail2Ban) ▼",
+        ["HideStatusDetailsButton"] = "Свернуть статус ▲",
         ["ContainerLogsTitle"] = "Логи контейнера",
         ["RefreshLogsButton"] = "Обновить логи",
 
@@ -285,6 +287,8 @@ public class LocalizationService : ILocalizationService
         ["ExportTxtButton"] = "Export Config (.txt)",
         ["RefreshStatusButton"] = "Refresh Status",
         ["RestartServiceButton"] = "Restart Hysteria",
+        ["ShowStatusDetailsButton"] = "Show Details (UFW / Fail2Ban) ▼",
+        ["HideStatusDetailsButton"] = "Collapse Status ▲",
         ["ContainerLogsTitle"] = "Container Logs",
         ["RefreshLogsButton"] = "Refresh Logs",
 

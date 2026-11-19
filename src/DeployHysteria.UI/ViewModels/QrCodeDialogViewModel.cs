@@ -66,29 +66,50 @@ public partial class QrCodeDialogViewModel : ViewModelBase
     [RelayCommand]
     private async Task CopyUriAsync()
     {
-        await _clipboardService.SetTextAsync(Uri);
-        ShowNotification(_loc["CopiedToClipboard"]);
+        try
+        {
+            await _clipboardService.SetTextAsync(Uri);
+            ShowNotification(_loc["CopiedToClipboard"]);
+        }
+        catch (Exception ex)
+        {
+            ShowNotification(ex.Message);
+        }
     }
 
     [RelayCommand]
     private async Task SaveQrImageAsync()
     {
-        var fileName = $"hysteria2_{Username}_qrcode.png";
-        var path = await _fileSaveService.SaveFileAsync(fileName, _qrPngBytes, "PNG Image", "png");
-        if (!string.IsNullOrEmpty(path))
+        try
         {
-            ShowNotification(_loc["SavedToFile"]);
+            var fileName = $"hysteria2_{Username}_qrcode.png";
+            var path = await _fileSaveService.SaveFileAsync(fileName, _qrPngBytes, "PNG Image", "png");
+            if (!string.IsNullOrEmpty(path))
+            {
+                ShowNotification(_loc["SavedToFile"]);
+            }
+        }
+        catch (Exception ex)
+        {
+            ShowNotification(ex.Message);
         }
     }
 
     [RelayCommand]
     private async Task ExportTextConfigAsync()
     {
-        var fileName = $"hysteria2_{Username}_config.txt";
-        var path = await _fileSaveService.SaveTextFileAsync(fileName, TextConfig);
-        if (!string.IsNullOrEmpty(path))
+        try
         {
-            ShowNotification(_loc["SavedToFile"]);
+            var fileName = $"hysteria2_{Username}_config.txt";
+            var path = await _fileSaveService.SaveTextFileAsync(fileName, TextConfig);
+            if (!string.IsNullOrEmpty(path))
+            {
+                ShowNotification(_loc["SavedToFile"]);
+            }
+        }
+        catch (Exception ex)
+        {
+            ShowNotification(ex.Message);
         }
     }
 

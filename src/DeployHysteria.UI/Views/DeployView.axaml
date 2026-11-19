@@ -7,19 +7,114 @@
              x:Class="DeployHysteria.UI.Views.DeployView"
              x:DataType="vm:DeployViewModel">
 
+    <UserControl.Styles>
+        <Style Selector="ToggleSwitch.ModeToggle">
+            <Setter Property="Grid.Row" Value="0" />
+            <Setter Property="Grid.Column" Value="1" />
+            <Setter Property="Grid.ColumnSpan" Value="1" />
+            <Setter Property="HorizontalAlignment" Value="Right" />
+            <Setter Property="Margin" Value="12,0,0,0" />
+        </Style>
+        <Style Selector=":is(UserControl).compact ToggleSwitch.ModeToggle">
+            <Setter Property="Grid.Row" Value="1" />
+            <Setter Property="Grid.Column" Value="0" />
+            <Setter Property="Grid.ColumnSpan" Value="2" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="Margin" Value="0,8,0,0" />
+        </Style>
+
+        <Style Selector="StackPanel.PrimaryField">
+            <Setter Property="Grid.Row" Value="0" />
+            <Setter Property="Grid.Column" Value="0" />
+            <Setter Property="Grid.ColumnSpan" Value="1" />
+            <Setter Property="Margin" Value="0,0,10,0" />
+        </Style>
+        <Style Selector=":is(UserControl).compact StackPanel.PrimaryField">
+            <Setter Property="Grid.ColumnSpan" Value="2" />
+            <Setter Property="Margin" Value="0" />
+        </Style>
+
+        <Style Selector="StackPanel.PortField">
+            <Setter Property="Grid.Row" Value="0" />
+            <Setter Property="Grid.Column" Value="1" />
+            <Setter Property="Grid.ColumnSpan" Value="1" />
+            <Setter Property="MinWidth" Value="120" />
+            <Setter Property="Margin" Value="0" />
+        </Style>
+        <Style Selector=":is(UserControl).compact StackPanel.PortField">
+            <Setter Property="Grid.Row" Value="1" />
+            <Setter Property="Grid.Column" Value="0" />
+            <Setter Property="Grid.ColumnSpan" Value="2" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="Margin" Value="0,10,0,0" />
+        </Style>
+
+        <Style Selector="StackPanel.BandwidthUpField">
+            <Setter Property="Grid.Row" Value="0" />
+            <Setter Property="Grid.Column" Value="0" />
+            <Setter Property="Grid.ColumnSpan" Value="1" />
+            <Setter Property="Margin" Value="0,0,8,0" />
+        </Style>
+        <Style Selector=":is(UserControl).compact StackPanel.BandwidthUpField">
+            <Setter Property="Grid.ColumnSpan" Value="2" />
+            <Setter Property="Margin" Value="0,0,0,10" />
+        </Style>
+
+        <Style Selector="StackPanel.BandwidthDownField">
+            <Setter Property="Grid.Row" Value="0" />
+            <Setter Property="Grid.Column" Value="1" />
+            <Setter Property="Grid.ColumnSpan" Value="1" />
+            <Setter Property="Margin" Value="8,0,0,0" />
+        </Style>
+        <Style Selector=":is(UserControl).compact StackPanel.BandwidthDownField">
+            <Setter Property="Grid.Row" Value="1" />
+            <Setter Property="Grid.Column" Value="0" />
+            <Setter Property="Grid.ColumnSpan" Value="2" />
+            <Setter Property="Margin" Value="0" />
+        </Style>
+
+        <Style Selector="TextBlock.SuccessStatusText">
+            <Setter Property="Grid.Row" Value="0" />
+            <Setter Property="Grid.Column" Value="0" />
+            <Setter Property="Grid.ColumnSpan" Value="1" />
+        </Style>
+        <Style Selector=":is(UserControl).compact TextBlock.SuccessStatusText">
+            <Setter Property="Grid.ColumnSpan" Value="2" />
+        </Style>
+
+        <Style Selector="Button.SuccessQrButton">
+            <Setter Property="Grid.Row" Value="0" />
+            <Setter Property="Grid.Column" Value="1" />
+            <Setter Property="Grid.ColumnSpan" Value="1" />
+            <Setter Property="HorizontalAlignment" Value="Right" />
+            <Setter Property="Margin" Value="8,0,0,0" />
+        </Style>
+        <Style Selector=":is(UserControl).compact Button.SuccessQrButton">
+            <Setter Property="Grid.Row" Value="1" />
+            <Setter Property="Grid.Column" Value="0" />
+            <Setter Property="Grid.ColumnSpan" Value="2" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="Margin" Value="0,8,0,0" />
+        </Style>
+    </UserControl.Styles>
+
     <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <StackPanel MaxWidth="820" Margin="16" Spacing="16">
+        <StackPanel Classes="PageContainer" MaxWidth="820">
 
             <!-- Mode Switcher Banner -->
-            <Border Classes="Card" Background="{DynamicResource ControlFillColorSecondaryBrush}">
-                <Grid ColumnDefinitions="*,Auto">
-                    <StackPanel Spacing="3">
+            <Border Classes="Card">
+                <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto">
+                    <StackPanel Grid.Row="0" Grid.Column="0" Spacing="3">
                         <TextBlock Text="{Binding Loc[ModeSimple]}"
                                    IsVisible="{Binding !IsAdvancedMode}"
-                                   FontSize="15" FontWeight="SemiBold" />
+                                   FontSize="15" FontWeight="SemiBold"
+                                   TextWrapping="Wrap"
+                                   Foreground="{DynamicResource PrimaryTextBrush}" />
                         <TextBlock Text="{Binding Loc[ModeAdvanced]}"
                                    IsVisible="{Binding IsAdvancedMode}"
-                                   FontSize="15" FontWeight="SemiBold" />
+                                   FontSize="15" FontWeight="SemiBold"
+                                   TextWrapping="Wrap"
+                                   Foreground="{DynamicResource PrimaryTextBrush}" />
 
                         <TextBlock Text="{Binding Loc[ModeDescriptionSimple]}"
                                    IsVisible="{Binding !IsAdvancedMode}"
@@ -29,7 +124,7 @@
                                    Classes="HelpHint" />
                     </StackPanel>
 
-                    <ToggleSwitch Grid.Column="1"
+                    <ToggleSwitch Classes="ModeToggle"
                                   IsChecked="{Binding IsAdvancedMode}"
                                   OnContent="{Binding Loc[ModeAdvanced]}"
                                   OffContent="{Binding Loc[ModeSimple]}"
@@ -40,18 +135,18 @@
             <!-- Card 1: Server Connection -->
             <Border Classes="Card">
                 <StackPanel Spacing="12">
-                    <TextBlock Text="{Binding Loc[ServerConnectionTitle]}" Classes="CardTitle" />
+                    <TextBlock Text="{Binding Loc[ServerConnectionTitle]}" Classes="CardTitle" TextWrapping="Wrap" />
 
                     <!-- Host & Port -->
-                    <Grid ColumnDefinitions="*,Auto">
-                        <StackPanel Margin="0,0,10,0">
+                    <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto">
+                        <StackPanel Classes="PrimaryField">
                             <TextBlock Text="{Binding Loc[HostLabel]}" Classes="FieldLabel" />
                             <TextBox Text="{Binding Host}"
                                      PlaceholderText="{Binding Loc[HostWatermark]}"
                                      ToolTip.Tip="{Binding Loc[HostTooltip]}" />
                         </StackPanel>
 
-                        <StackPanel Grid.Column="1" Width="120" IsVisible="{Binding IsAdvancedMode}">
+                        <StackPanel Classes="PortField" IsVisible="{Binding IsAdvancedMode}">
                             <TextBlock Text="{Binding Loc[SshPortLabel]}" Classes="FieldLabel" />
                             <NumericUpDown Value="{Binding SshPort}"
                                            Minimum="1" Maximum="65535"
@@ -72,17 +167,19 @@
                     <StackPanel IsVisible="{Binding IsAdvancedMode}" Spacing="6">
                         <TextBlock Text="{Binding Loc[AuthTypeLabel]}" Classes="FieldLabel" />
                         <StackPanel Orientation="Horizontal" Spacing="16">
-                            <RadioButton Content="{Binding Loc[AuthTypePassword]}"
-                                         IsChecked="{Binding AuthTypeIndex, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=0}"
+                            <RadioButton GroupName="DeployAuthMethod"
+                                         Content="{Binding Loc[AuthTypePassword]}"
+                                         IsChecked="{Binding IsPasswordAuth, Mode=OneWay}"
                                          Command="{Binding SelectPasswordAuthCommand}" />
-                            <RadioButton Content="{Binding Loc[AuthTypeKey]}"
-                                         IsChecked="{Binding AuthTypeIndex, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=1}"
+                            <RadioButton GroupName="DeployAuthMethod"
+                                         Content="{Binding Loc[AuthTypeKey]}"
+                                         IsChecked="{Binding IsKeyAuth, Mode=OneWay}"
                                          Command="{Binding SelectKeyAuthCommand}" />
                         </StackPanel>
                     </StackPanel>
 
                     <!-- Password field -->
-                    <StackPanel IsVisible="{Binding AuthTypeIndex, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=0}">
+                    <StackPanel IsVisible="{Binding IsPasswordAuth}">
                         <TextBlock Text="{Binding Loc[PasswordLabel]}" Classes="FieldLabel" />
                         <TextBox Text="{Binding Password}"
                                  PasswordChar="●"
@@ -91,7 +188,7 @@
                     </StackPanel>
 
                     <!-- SSH Key fields -->
-                    <StackPanel IsVisible="{Binding AuthTypeIndex, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=1}" Spacing="8">
+                    <StackPanel IsVisible="{Binding IsKeyAuth}" Spacing="8">
                         <TextBlock Text="{Binding Loc[SshKeyLabel]}" Classes="FieldLabel" />
                         <TextBox Text="{Binding SshPrivateKey}"
                                  AcceptsReturn="True"
@@ -114,15 +211,15 @@
                     <TextBlock Text="{Binding Loc[HysteriaConfigTitle]}" Classes="CardTitle" />
 
                     <!-- Domain & Port -->
-                    <Grid ColumnDefinitions="*,Auto">
-                        <StackPanel Margin="0,0,10,0">
+                    <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto">
+                        <StackPanel Classes="PrimaryField">
                             <TextBlock Text="{Binding Loc[DomainLabel]}" Classes="FieldLabel" />
                             <TextBox Text="{Binding Domain}"
                                      PlaceholderText="{Binding Loc[DomainWatermark]}"
                                      ToolTip.Tip="{Binding Loc[DomainTooltip]}" />
                         </StackPanel>
 
-                        <StackPanel Grid.Column="1" Width="120" IsVisible="{Binding IsAdvancedMode}">
+                        <StackPanel Classes="PortField" IsVisible="{Binding IsAdvancedMode}">
                             <TextBlock Text="{Binding Loc[ListenPortLabel]}" Classes="FieldLabel" />
                             <NumericUpDown Value="{Binding ListenPort}"
                                            Minimum="1" Maximum="65535"
@@ -156,8 +253,10 @@
                     </StackPanel>
 
                     <!-- Obfuscation -->
-                    <Border Background="{DynamicResource ControlFillColorSecondaryBrush}"
-                            CornerRadius="6"
+                    <Border Background="{DynamicResource SubtleFillBrush}"
+                            BorderBrush="{DynamicResource CardBorderBrush}"
+                            BorderThickness="1"
+                            CornerRadius="8"
                             Padding="12"
                             Margin="0,4,0,0">
                         <StackPanel Spacing="8">
@@ -195,13 +294,13 @@
                         <ComboBoxItem Content="{Binding Loc[MasqueradeTypeProxy]}" />
                     </ComboBox>
 
-                    <StackPanel IsVisible="{Binding MasqueradeTypeIndex, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=0}">
+                    <StackPanel IsVisible="{Binding IsFileMasquerade}">
                         <TextBlock Text="{Binding Loc[MasqueradeDirLabel]}" Classes="FieldLabel" />
                         <TextBox Text="{Binding MasqueradeDir}"
                                  PlaceholderText="{Binding Loc[MasqueradeDirWatermark]}" />
                     </StackPanel>
 
-                    <StackPanel IsVisible="{Binding MasqueradeTypeIndex, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=1}">
+                    <StackPanel IsVisible="{Binding IsProxyMasquerade}">
                         <TextBlock Text="{Binding Loc[MasqueradeProxyUrlLabel]}" Classes="FieldLabel" />
                         <TextBox Text="{Binding MasqueradeProxyUrl}"
                                  PlaceholderText="{Binding Loc[MasqueradeProxyUrlWatermark]}" />
@@ -215,14 +314,14 @@
                     <TextBlock Text="{Binding Loc[BandwidthTitle]}" Classes="CardTitle" />
                     <TextBlock Text="{Binding Loc[BandwidthTooltip]}" Classes="HelpHint" />
 
-                    <Grid ColumnDefinitions="*,*">
-                        <StackPanel Margin="0,0,8,0">
+                    <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto">
+                        <StackPanel Classes="BandwidthUpField">
                             <TextBlock Text="{Binding Loc[BandwidthUpLabel]}" Classes="FieldLabel" />
                             <TextBox Text="{Binding BandwidthUp}"
                                      PlaceholderText="{Binding Loc[BandwidthUpWatermark]}" />
                         </StackPanel>
 
-                        <StackPanel Grid.Column="1" Margin="8,0,0,0">
+                        <StackPanel Classes="BandwidthDownField">
                             <TextBlock Text="{Binding Loc[BandwidthDownLabel]}" Classes="FieldLabel" />
                             <TextBox Text="{Binding BandwidthDown}"
                                      PlaceholderText="{Binding Loc[BandwidthDownWatermark]}" />
@@ -233,7 +332,7 @@
 
             <!-- Card 5 (Advanced): Security & Pre-flight checks -->
             <Border Classes="Card" IsVisible="{Binding IsAdvancedMode}">
-                <StackPanel Spacing="12">
+                <StackPanel Spacing="10">
                     <TextBlock Text="{Binding Loc[SecurityTitle]}" Classes="CardTitle" />
 
                     <CheckBox IsChecked="{Binding EnableUfw}"
@@ -267,13 +366,14 @@
                     <Border IsVisible="{Binding IsSuccess}"
                             Classes="BadgeSuccess"
                             Padding="12,8">
-                        <Grid ColumnDefinitions="*,Auto">
-                            <TextBlock Text="{Binding StatusMessage}"
+                        <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto">
+                            <TextBlock Classes="SuccessStatusText"
+                                       Text="{Binding StatusMessage}"
                                        Foreground="#107C41"
                                        FontWeight="Medium"
+                                       TextWrapping="Wrap"
                                        VerticalAlignment="Center" />
-                            <Button Grid.Column="1"
-                                    Classes="Primary"
+                            <Button Classes="Primary SuccessQrButton"
                                     Content="{Binding Loc[ShowQrButton]}"
                                     Command="{Binding OpenClientQrCommand}" />
                         </Grid>
@@ -300,11 +400,13 @@
                                  Height="4" />
 
                     <!-- Live Logs Viewer -->
-                    <TextBlock Text="{Binding Loc[DeploymentLogsTitle]}" Classes="FieldLabel" Margin="0,8,0,0" />
-                    <Border Background="{DynamicResource ControlFillColorSecondaryBrush}"
+                    <TextBlock Text="{Binding Loc[DeploymentLogsTitle]}" Classes="FieldLabel" Margin="0,4,0,0" />
+                    <Border Background="{DynamicResource SubtleFillBrush}"
+                            BorderBrush="{DynamicResource CardBorderBrush}"
+                            BorderThickness="1"
                             CornerRadius="6"
                             Padding="10"
-                            Height="180">
+                            Height="160">
                         <ScrollViewer>
                             <ItemsControl ItemsSource="{Binding DeploymentLogs}">
                                 <ItemsControl.ItemTemplate>
@@ -312,7 +414,7 @@
                                         <TextBlock Text="{Binding}"
                                                    FontFamily="Consolas,Menlo,Monospace"
                                                    FontSize="11"
-                                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                                   Foreground="{DynamicResource SecondaryTextBrush}"
                                                    TextWrapping="Wrap" />
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>

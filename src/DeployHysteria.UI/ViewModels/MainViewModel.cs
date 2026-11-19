@@ -9,6 +9,8 @@ public partial class MainViewModel : ViewModelBase
     private readonly ILocalizationService _loc;
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsDeployTabSelected))]
+    [NotifyPropertyChangedFor(nameof(IsManageTabSelected))]
     private int _selectedTabIndex = 0;
 
     [ObservableProperty]
@@ -16,6 +18,9 @@ public partial class MainViewModel : ViewModelBase
 
     [ObservableProperty]
     private ManageViewModel _manage;
+
+    public bool IsDeployTabSelected => SelectedTabIndex == 0;
+    public bool IsManageTabSelected => SelectedTabIndex == 1;
 
     public ILocalizationService Loc => _loc;
 
@@ -34,7 +39,8 @@ public partial class MainViewModel : ViewModelBase
         {
             if (e.PropertyName == nameof(DeployViewModel.QrDialog))
             {
-                OnPropertyChanged(nameof(ActiveQrDialog));
+                SubscribeQrDialog(_deploy.QrDialog);
+                NotifyQrDialogChanged();
             }
         };
 
@@ -42,9 +48,28 @@ public partial class MainViewModel : ViewModelBase
         {
             if (e.PropertyName == nameof(ManageViewModel.QrDialog))
             {
-                OnPropertyChanged(nameof(ActiveQrDialog));
+                SubscribeQrDialog(_manage.QrDialog);
+                NotifyQrDialogChanged();
             }
         };
+    }
+
+    private void SubscribeQrDialog(QrCodeDialogViewModel? dialog)
+    {
+        if (dialog == null) return;
+        dialog.PropertyChanged += (_, e) =>
+        {
+            if (e.PropertyName == nameof(QrCodeDialogViewModel.IsOpen))
+            {
+                NotifyQrDialogChanged();
+            }
+        };
+    }
+
+    private void NotifyQrDialogChanged()
+    {
+        OnPropertyChanged(nameof(ActiveQrDialog));
+        OnPropertyChanged(nameof(HasActiveQrDialog));
     }
 
     public QrCodeDialogViewModel? ActiveQrDialog
@@ -56,6 +81,8 @@ public partial class MainViewModel : ViewModelBase
             return null;
         }
     }
+
+    public bool HasActiveQrDialog => ActiveQrDialog != null;
 
     [RelayCommand]
     public void SetDeployTab() => SelectedTabIndex = 0;

@@ -34,7 +34,12 @@ public partial class DeployViewModel : ViewModelBase
     private string _username = "root";
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsPasswordAuth))]
+    [NotifyPropertyChangedFor(nameof(IsKeyAuth))]
     private int _authTypeIndex = 0; // 0 = Password, 1 = Key
+
+    public bool IsPasswordAuth => AuthTypeIndex == 0;
+    public bool IsKeyAuth => AuthTypeIndex == 1;
 
     [ObservableProperty]
     private string _password = string.Empty;
@@ -66,7 +71,12 @@ public partial class DeployViewModel : ViewModelBase
 
     // Advanced options
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsFileMasquerade))]
+    [NotifyPropertyChangedFor(nameof(IsProxyMasquerade))]
     private int _masqueradeTypeIndex = 0; // 0 = File, 1 = Proxy
+
+    public bool IsFileMasquerade => MasqueradeTypeIndex == 0;
+    public bool IsProxyMasquerade => MasqueradeTypeIndex == 1;
 
     [ObservableProperty]
     private string _masqueradeDir = "/var/www/masq";

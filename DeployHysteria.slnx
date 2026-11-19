@@ -8,4 +8,7 @@
     <Project Path="tests/DeployHysteria.Core.Tests/DeployHysteria.Core.Tests.csproj" />
     <Project Path="tests/DeployHysteria.UI.Tests/DeployHysteria.UI.Tests.csproj" />
   </Folder>
+  <Project Path="src/DeployHysteria.Android/DeployHysteria.Android.csproj">
+    <Deploy />
+  </Project>
 </Solution>

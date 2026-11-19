@@ -1,6 +1,3 @@
-using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Platform.Storage;
 
 namespace DeployHysteria.UI.Services;
@@ -9,7 +6,7 @@ public class AvaloniaClipboardService : IClipboardService
 {
     public async Task SetTextAsync(string text)
     {
-        var topLevel = GetTopLevel();
+        var topLevel = TopLevelProvider.GetTopLevel();
         if (topLevel?.Clipboard != null)
         {
             var transfer = new Avalonia.Input.DataTransfer();
@@ -17,40 +14,27 @@ public class AvaloniaClipboardService : IClipboardService
             await topLevel.Clipboard.SetDataAsync(transfer);
         }
     }
-
-    private static TopLevel? GetTopLevel()
-    {
-        if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
-        {
-            return desktop.MainWindow;
-        }
-
-        if (Application.Current?.ApplicationLifetime is ISingleViewApplicationLifetime singleView)
-        {
-            return TopLevel.GetTopLevel(singleView.MainView);
-        }
-
-        return null;
-    }
 }
 
 public class AvaloniaFileSaveService : IFileSaveService
 {
     public async Task<string?> SaveFileAsync(string defaultFileName, byte[] data, string fileTypeDescription, string extension)
     {
-        var topLevel = GetTopLevel();
+        var topLevel = TopLevelProvider.GetTopLevel();
         if (topLevel?.StorageProvider != null && topLevel.StorageProvider.CanSave)
         {
+            var cleanExt = extension.TrimStart('.');
             var options = new FilePickerSaveOptions
             {
                 Title = "Save File",
                 SuggestedFileName = defaultFileName,
-                DefaultExtension = extension,
+                DefaultExtension = cleanExt,
                 FileTypeChoices =
                 [
                     new FilePickerFileType(fileTypeDescription)
                     {
-                        Patterns = [$"*.{extension.TrimStart('.')}"]
+                        Patterns = [$"*.{cleanExt}"],
+                        MimeTypes = GetMimeTypes(cleanExt)
                     }
                 ]
             };
@@ -60,14 +44,27 @@ public class AvaloniaFileSaveService : IFileSaveService
             {
                 await using var stream = await file.OpenWriteAsync();
                 await stream.WriteAsync(data);
-                return file.Path.LocalPath;
+                await stream.FlushAsync();
+                return file.Path?.IsFile == true
+                    ? file.Path.LocalPath
+                    : file.Path?.ToString() ?? file.Name;
             }
 
             return null;
         }
 
-        // Fallback: save to Downloads or current directory
-        var fallbackPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads", defaultFileName);
+        // Fallback: save to Downloads or app documents directory
+        var baseDir = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+        if (string.IsNullOrWhiteSpace(baseDir))
+        {
+            baseDir = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+        }
+        if (string.IsNullOrWhiteSpace(baseDir))
+        {
+            baseDir = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+        }
+
+        var fallbackPath = Path.Combine(baseDir, "Downloads", defaultFileName);
         var dir = Path.GetDirectoryName(fallbackPath);
         if (!string.IsNullOrEmpty(dir) && !Directory.Exists(dir))
         {
@@ -83,18 +80,13 @@ public class AvaloniaFileSaveService : IFileSaveService
         return await SaveFileAsync(defaultFileName, System.Text.Encoding.UTF8.GetBytes(content), "Text File", "txt");
     }
 
-    private static TopLevel? GetTopLevel()
+    private static IReadOnlyList<string> GetMimeTypes(string extension) => extension.ToLowerInvariant() switch
     {
-        if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
-        {
-            return desktop.MainWindow;
-        }
-
-        if (Application.Current?.ApplicationLifetime is ISingleViewApplicationLifetime singleView)
-        {
-            return TopLevel.GetTopLevel(singleView.MainView);
-        }
-
-        return null;
-    }
+        "png" => ["image/png"],
+        "jpg" or "jpeg" => ["image/jpeg"],
+        "txt" => ["text/plain"],
+        "json" => ["application/json"],
+        "yaml" or "yml" => ["text/yaml", "application/x-yaml"],
+        _ => ["application/octet-stream"]
+    };
 }

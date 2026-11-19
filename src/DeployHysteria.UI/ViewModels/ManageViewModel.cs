@@ -30,7 +30,12 @@ public partial class ManageViewModel : ViewModelBase
     private string _username = "root";
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsPasswordAuth))]
+    [NotifyPropertyChangedFor(nameof(IsKeyAuth))]
     private int _authTypeIndex = 0; // 0 = Password, 1 = Key
+
+    public bool IsPasswordAuth => AuthTypeIndex == 0;
+    public bool IsKeyAuth => AuthTypeIndex == 1;
 
     [ObservableProperty]
     private string _password = string.Empty;
@@ -70,6 +75,9 @@ public partial class ManageViewModel : ViewModelBase
     [ObservableProperty]
     private string _containerLogs = string.Empty;
 
+    [ObservableProperty]
+    private bool _isStatusExpanded = false;
+
     // Config Cache
     [ObservableProperty]
     private HysteriaConfig? _currentConfig;
@@ -105,6 +113,9 @@ public partial class ManageViewModel : ViewModelBase
 
         GenerateNewUserPassword();
     }
+
+    [RelayCommand]
+    public void ToggleStatusExpanded() => IsStatusExpanded = !IsStatusExpanded;
 
     [RelayCommand]
     public void SelectPasswordAuth() => AuthTypeIndex = 0;
