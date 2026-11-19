@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/DeployHysteria.Core/DeployHysteria.Core.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/DeployHysteria.Core.Tests/DeployHysteria.Core.Tests.csproj" />
+  </Folder>
+</Solution>
