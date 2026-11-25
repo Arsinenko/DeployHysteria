@@ -309,6 +309,10 @@ public partial class ManageViewModel : ViewModelBase
 
             Domain = CurrentConfig.Acme.Domains[0];
             Email = CurrentConfig.Acme.Email;
+            if (int.TryParse(CurrentConfig.Listen.TrimStart(':'), out int port))
+            {
+                ListenPort = port;
+            }
             if (CurrentConfig.Obfs != null)
             {
                 if (CurrentConfig.Obfs.Salamander != null)
