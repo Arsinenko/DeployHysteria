@@ -280,6 +280,19 @@
                         </StackPanel>
                     </Border>
 
+                    <!-- ACL Params (Advanced) -->
+                    <StackPanel IsVisible="{Binding IsAdvancedMode}" Spacing="4">
+                        <TextBlock Text="ACL Params" Classes="FieldLabel" />
+                        <TextBox Text="{Binding AclParamsText, Mode=TwoWay}"
+                                 AcceptsReturn="True"
+                                 Height="92"
+                                 FontFamily="Consolas,Menlo,Monospace"
+                                 PlaceholderText="reject(geoip:ru)&#10;reject(geosite:category-ru)&#10;direct(all)"
+                                 ToolTip.Tip="ACL rules, one per line. Custom rules are applied before the default rules." />
+                        <TextBlock Text="One rule per line, applied in order."
+                                   Classes="HelpHint" />
+                    </StackPanel>
+
                 </StackPanel>
             </Border>
 

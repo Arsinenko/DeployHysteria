@@ -379,6 +379,83 @@
                         </Grid>
                     </StackPanel>
                 </Border>
+                <!-- Card hysteria settings -->
+                <Border Classes="Card">
+                <StackPanel Spacing="12">
+                    <TextBlock Text="{Binding Loc[HysteriaConfigTitle]}" Classes="CardTitle" />
+
+                    <!-- Domain & Port -->
+                    <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto">
+                        <StackPanel Classes="PrimaryField">
+                            <TextBlock Text="{Binding Loc[DomainLabel]}" Classes="FieldLabel" />
+                            <TextBox Text="{Binding Domain}"
+                                     PlaceholderText="{Binding Loc[DomainWatermark]}"
+                                     ToolTip.Tip="{Binding Loc[DomainTooltip]}" />
+                        </StackPanel>
+
+                        <StackPanel Classes="PortField" IsVisible="True">
+                            <TextBlock Text="{Binding Loc[ListenPortLabel]}" Classes="FieldLabel" />
+                            <NumericUpDown Value="{Binding ListenPort}"
+                                           Minimum="1" Maximum="65535"
+                                           FormatString="0"
+                                           ToolTip.Tip="{Binding Loc[ListenPortTooltip]}" />
+                        </StackPanel>
+                    </Grid>
+
+                    <!-- Email -->
+                    <StackPanel>
+                        <TextBlock Text="{Binding Loc[EmailLabel]}" Classes="FieldLabel" />
+                        <TextBox Text="{Binding Email}"
+                                 PlaceholderText="{Binding Loc[EmailWatermark]}"
+                                 ToolTip.Tip="{Binding Loc[EmailTooltip]}" />
+                    </StackPanel>
+                    
+
+                    <!-- Obfuscation -->
+                    <Border Background="{DynamicResource SubtleFillBrush}"
+                            BorderBrush="{DynamicResource CardBorderBrush}"
+                            BorderThickness="1"
+                            CornerRadius="8"
+                            Padding="12"
+                            Margin="0,4,0,0">
+                        <StackPanel Spacing="8">
+                            <CheckBox IsChecked="{Binding EnableObfs}"
+                                      Content="{Binding Loc[EnableObfsLabel]}"
+                                      ToolTip.Tip="{Binding Loc[ObfsTooltip]}" />
+
+                            <StackPanel IsVisible="{Binding EnableObfs}" Spacing="4">
+                                <TextBlock Text="{Binding Loc[ObfsPasswordLabel]}" Classes="FieldLabel" />
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <TextBox Text="{Binding ObfsPassword}"
+                                             PlaceholderText="{Binding Loc[ObfsPasswordWatermark]}"
+                                             CornerRadius="6,0,0,6" />
+                                    <Button Grid.Column="1"
+                                            Classes="Secondary"
+                                            CornerRadius="0,6,6,0"
+                                            Content="{Binding Loc[GenerateButton]}"
+                                            Command="{Binding GeneratePasswordsCommand}" />
+                                </Grid>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- ACL Params (Advanced) -->
+                    <StackPanel IsVisible="True" Spacing="4">
+                        <TextBlock Text="ACL Params" Classes="FieldLabel" />
+                        <TextBox Text="{Binding AclParamsText, Mode=TwoWay}"
+                                 AcceptsReturn="True"
+                                 Height="92"
+                                 FontFamily="Consolas,Menlo,Monospace"
+                                 PlaceholderText="reject(geoip:ru)&#10;reject(geosite:category-ru)&#10;direct(all)"
+                                 ToolTip.Tip="ACL rules, one per line. Custom rules are applied before the default rules." />
+                        <TextBlock Text="One rule per line, applied in order."
+                                   Classes="HelpHint" />
+                    </StackPanel>
+                    
+                    <Button Content="Save"></Button>
+
+                </StackPanel>
+            </Border>
 
                 <!-- Users Management Card -->
                 <Border Classes="Card">

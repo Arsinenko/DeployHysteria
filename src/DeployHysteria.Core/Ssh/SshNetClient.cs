@@ -7,8 +7,8 @@ namespace DeployHysteria.Core.Ssh;
 
 public class SshNetClient : ISshClient
 {
-    private readonly Renci.SshNet.SshClient _sshClient;
-    private readonly Renci.SshNet.SftpClient _sftpClient;
+    private readonly SshClient _sshClient;
+    private readonly SftpClient _sftpClient;
     private bool _disposed;
 
     public SshNetClient(ServerConnectionInfo connectionInfo)
@@ -33,14 +33,14 @@ public class SshNetClient : ISshClient
             authMethods.Add(new PrivateKeyAuthenticationMethod(connectionInfo.Username, keyFile));
         }
 
-        var sshConnectionInfo = new Renci.SshNet.ConnectionInfo(
+        var sshConnectionInfo = new ConnectionInfo(
             connectionInfo.Host,
             connectionInfo.Port,
             connectionInfo.Username,
             authMethods.ToArray());
 
-        _sshClient = new Renci.SshNet.SshClient(sshConnectionInfo);
-        _sftpClient = new Renci.SshNet.SftpClient(sshConnectionInfo);
+        _sshClient = new SshClient(sshConnectionInfo);
+        _sftpClient = new SftpClient(sshConnectionInfo);
     }
 
     public bool IsConnected => _sshClient.IsConnected && _sftpClient.IsConnected;

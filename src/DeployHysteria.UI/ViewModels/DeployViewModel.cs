@@ -2,6 +2,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
+using Avalonia.Controls.Documents;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DeployHysteria.Core.Deployment;
@@ -83,6 +84,20 @@ public partial class DeployViewModel : ViewModelBase
 
     [ObservableProperty]
     private string _masqueradeProxyUrl = "https://bing.com";
+
+    [ObservableProperty] private ObservableCollection<string> _aclParams = [];
+
+    [ObservableProperty]
+    private string _aclParamsText = string.Empty;
+
+    partial void OnAclParamsTextChanged(string value)
+    {
+        AclParams.Clear();
+        foreach (var rule in value.Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
+        {
+            AclParams.Add(rule);
+        }
+    }
 
     [ObservableProperty]
     private string _bandwidthUp = string.Empty;
@@ -237,6 +252,11 @@ public partial class DeployViewModel : ViewModelBase
                 Acl = new AclConfig(),
                 Auth = AuthConfig.FromSinglePassword(ClientPassword)
             };
+
+            if (AclParams.Count > 0)
+            {
+                hysteriaConfig.Acl.Inline.InsertRange(0, AclParams);
+            }
 
             if (EnableObfs && !string.IsNullOrWhiteSpace(ObfsPassword))
             {

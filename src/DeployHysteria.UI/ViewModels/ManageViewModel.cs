@@ -1,7 +1,5 @@
-using System;
 using System.Collections.ObjectModel;
 using System.Security.Cryptography;
-using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DeployHysteria.Core.Management;
@@ -81,6 +79,43 @@ public partial class ManageViewModel : ViewModelBase
     // Config Cache
     [ObservableProperty]
     private HysteriaConfig? _currentConfig;
+    
+    //Acl
+    [ObservableProperty] private ObservableCollection<string> _aclParams = [];
+
+    [ObservableProperty]
+    private string _aclParamsText = string.Empty;
+
+    partial void OnAclParamsTextChanged(string value)
+    {
+        AclParams.Clear();
+        foreach (var rule in value.Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
+        {
+            AclParams.Add(rule);
+        }
+    }
+    
+    //Bandwidth
+    [ObservableProperty]
+    private string _bandwidthUp = string.Empty;
+
+    [ObservableProperty]
+    private string _bandwidthDown = string.Empty;
+    
+    [ObservableProperty]
+    private string _domain = string.Empty;
+
+    [ObservableProperty]
+    private string _email = string.Empty;
+
+    [ObservableProperty]
+    private int _listenPort = 443;
+    
+    [ObservableProperty]
+    private bool _enableObfs = true;
+
+    [ObservableProperty]
+    private string _obfsPassword = string.Empty;
 
     // Users
     [ObservableProperty]
@@ -172,6 +207,7 @@ public partial class ManageViewModel : ViewModelBase
             CurrentConfig = await _manager.GetCurrentConfigAsync(conn, RemoteDirectory);
             await RefreshStatusAsync();
             await RefreshUsersAsync();
+            await RefreshConfigAsync();
 
             IsConnected = true;
             StatusMessage = "Connected to server successfully.";
@@ -221,6 +257,69 @@ public partial class ManageViewModel : ViewModelBase
         finally
         {
             IsLoading = false;
+        }
+    }
+
+    [RelayCommand]
+    public async Task UpdateConfigAsync()
+    {
+        if (string.IsNullOrWhiteSpace(Host)) return;
+
+        try
+        {
+            CurrentConfig.Acme.Domains = new List<string>() { Domain };
+            CurrentConfig.Acme.Email = Email;
+            CurrentConfig.Listen = ListenPort.ToString();
+            
+            CurrentConfig.Obfs.Salamander.Password = ObfsPassword;
+            CurrentConfig.Acl = new AclConfig()
+            {
+                Inline = AclParams.ToList()
+            };
+            
+            var conn = CreateConnectionInfo();
+            await _manager.UpdateConfigAsync(conn, CurrentConfig!);
+
+            await RefreshConfigAsync();
+        }
+        catch (Exception ex)
+        {
+           ErrorMessage =  $"Failed to update config: {ex.Message}"; 
+        }
+    }
+
+    [RelayCommand]
+    public async Task RefreshConfigAsync()
+    {
+        if (string.IsNullOrWhiteSpace(Host)) return;
+    
+        try
+        {
+            var conn = CreateConnectionInfo();
+            CurrentConfig = await _manager.GetCurrentConfigAsync(conn);
+            
+            if (CurrentConfig == null) return;
+
+            AclParams = new ObservableCollection<string>(CurrentConfig.Acl!.Inline);
+            if (CurrentConfig.Bandwidth != null)
+            {
+                BandwidthUp = CurrentConfig.Bandwidth.Up!;
+                BandwidthDown = CurrentConfig.Bandwidth.Down!;
+            }
+
+            Domain = CurrentConfig.Acme.Domains[0];
+            Email = CurrentConfig.Acme.Email;
+            if (CurrentConfig.Obfs != null)
+            {
+                if (CurrentConfig.Obfs.Salamander != null)
+                {
+                    ObfsPassword = CurrentConfig.Obfs.Salamander.Password;
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage =  $"Failed to refresh config: {ex.Message}";
         }
     }
 
@@ -368,6 +467,12 @@ public partial class ManageViewModel : ViewModelBase
         {
             IsLoading = false;
         }
+    }
+    
+    [RelayCommand]
+    public void GeneratePasswords()
+    {
+        ObfsPassword = GenerateRandomPassword(18);
     }
 
     private static string GenerateRandomPassword(int length = 18)

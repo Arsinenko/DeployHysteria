@@ -18,4 +18,8 @@
   <ItemGroup>
     <ProjectReference Include="..\DeployHysteria.UI\DeployHysteria.UI.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="artifacts\" />
+  </ItemGroup>
 </Project>
