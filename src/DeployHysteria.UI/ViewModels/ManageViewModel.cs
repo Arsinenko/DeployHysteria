@@ -234,6 +234,26 @@ public partial class ManageViewModel : ViewModelBase
     }
 
     [RelayCommand]
+    public async Task StopService()
+    {
+        if (string.IsNullOrWhiteSpace(Host)) return;
+
+        IsLoading = true;
+        try
+        {
+            var conn = CreateConnectionInfo();
+            await _manager.StopServiceAsync(conn);
+
+            StatusMessage = "Service stopped.";
+            await RefreshStatusAsync();
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = $"Failed to stop service: {ex.Message}";
+        }
+    }
+
+    [RelayCommand]
     public async Task RefreshStatusAsync()
     {
         if (string.IsNullOrWhiteSpace(Host)) return;

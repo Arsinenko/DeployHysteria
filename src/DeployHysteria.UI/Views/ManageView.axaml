@@ -308,6 +308,10 @@
                                         Margin="0,0,0,6"
                                         Content="{Binding Loc[DisconnectButton]}"
                                         Command="{Binding DisconnectCommand}" />
+                                <Button Classes="Secondary"
+                                        Margin="0,0,0,6"
+                                        Content="{Binding Loc[StopServiceButton]}"
+                                        Command="{Binding StopServiceCommand}"/>
                             </WrapPanel>
                         </Grid>
 
