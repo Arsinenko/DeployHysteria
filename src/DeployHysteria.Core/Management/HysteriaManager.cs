@@ -194,4 +194,19 @@ public class HysteriaManager : IHysteriaManager
         var restartRes = await client.ExecuteCommandAsync(restartCmd, cancellationToken);
         restartRes.EnsureSuccess("Failed to restart Hysteria service");
     }
+
+    public async Task StopServiceAsync(ServerConnectionInfo connection, string remoteDir = "/opt/hysteria2",
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(connection);
+        connection.Validate();
+        
+        using var client = _sshClientFactory.Create(connection);
+        await client.ConnectAsync(cancellationToken);
+        
+        var escapedDir = ShellSanitizer.Escape(remoteDir);
+        var stopCmd = $"cd {escapedDir} && (docker compose stop || docker-compose stop)";
+        var stopRes = await client.ExecuteCommandAsync(stopCmd, cancellationToken);
+        stopRes.EnsureSuccess("Failed to stop Hysteria service");
+    }
 }

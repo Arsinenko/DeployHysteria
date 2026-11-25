@@ -141,6 +141,7 @@ public class LocalizationService : ILocalizationService
         ["ConnectButton"] = "Подключиться к серверу",
         ["ConnectingButton"] = "Подключение...",
         ["DisconnectButton"] = "Отключиться",
+        ["SaveButton"] = "Сохранить",
         ["ServerStatusTitle"] = "Состояние сервера",
         ["ContainerStatusLabel"] = "Контейнер Hysteria 2:",
         ["UfwStatusLabel"] = "Фаервол UFW:",
@@ -164,6 +165,7 @@ public class LocalizationService : ILocalizationService
         ["HideStatusDetailsButton"] = "Свернуть статус ▲",
         ["ContainerLogsTitle"] = "Логи контейнера",
         ["RefreshLogsButton"] = "Обновить логи",
+        
 
         // Dialogs / Notifications
         ["DialogTitleQr"] = "Настройки подключения для клиента",
@@ -268,6 +270,7 @@ public class LocalizationService : ILocalizationService
         ["ConnectButton"] = "Connect to Server",
         ["ConnectingButton"] = "Connecting...",
         ["DisconnectButton"] = "Disconnect",
+        ["SaveButton"] = "Save",
         ["ServerStatusTitle"] = "Server Status",
         ["ContainerStatusLabel"] = "Hysteria 2 Container:",
         ["UfwStatusLabel"] = "UFW Firewall:",

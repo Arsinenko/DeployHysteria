@@ -452,7 +452,8 @@
                                    Classes="HelpHint" />
                     </StackPanel>
                     
-                    <Button Content="Save"></Button>
+                    <Button Content="{Binding Loc[SaveButton]}" Classes="Secondary"
+                            CornerRadius="0,6,6,0" Command="{Binding UpdateConfigCommand}"></Button>
 
                 </StackPanel>
             </Border>

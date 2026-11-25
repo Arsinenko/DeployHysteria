@@ -267,15 +267,16 @@ public partial class ManageViewModel : ViewModelBase
 
         try
         {
+            if (CurrentConfig == null)
+            {
+                throw new ArgumentException("config cannot be null.");
+            }
             CurrentConfig.Acme.Domains = new List<string>() { Domain };
             CurrentConfig.Acme.Email = Email;
-            CurrentConfig.Listen = ListenPort.ToString();
+            // CurrentConfig.Listen = ListenPort.ToString();
             
             CurrentConfig.Obfs.Salamander.Password = ObfsPassword;
-            CurrentConfig.Acl = new AclConfig()
-            {
-                Inline = AclParams.ToList()
-            };
+            // CurrentConfig.Acl.Inline.InsertRange(0, AclParams);
             
             var conn = CreateConnectionInfo();
             await _manager.UpdateConfigAsync(conn, CurrentConfig!);

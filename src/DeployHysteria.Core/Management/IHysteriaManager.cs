@@ -53,4 +53,11 @@ public interface IHysteriaManager
         ServerConnectionInfo connection,
         string remoteDir = "/opt/hysteria2",
         CancellationToken cancellationToken = default);
+
+    Task StopServiceAsync(
+        ServerConnectionInfo connection,
+        string remoteDir = "/opt/hysteria2",
+        CancellationToken cancellationToken = default
+    );
+    
 }
